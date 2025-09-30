@@ -9,29 +9,41 @@
   <link rel="stylesheet" href="design.css">
   <link rel="stylesheet" href="traveling.css">
   <link href="https://fonts.cdnfonts.com/css/algebra" rel="stylesheet">
-
+  <link rel="stylesheet" href="logo.css">
 </head>
 <body>
   <!-- DarShana Logo Animation -->
-    <div id="logo-container">
+    <div id="splash">
     <div class="logo-symbol">
-      <!-- Inspired by mandala & Indian map pinch -->
       <svg viewBox="0 0 120 120">
         <circle cx="60" cy="60" r="52" fill="none" stroke="#e65100" stroke-width="6" />
         <path d="M60,10 Q70,30 60,50 Q50,30 60,10" fill="#F4CA69" stroke="#e65100" stroke-width="2"/>
         <path d="M60,110 Q70,90 60,70 Q50,90 60,110" fill="#F4CA69" stroke="#e65100" stroke-width="2"/>
         <circle cx="60" cy="60" r="22" fill="#fffbe6" stroke="#e65100" stroke-width="4"/>
-        <text x="60" y="68" text-anchor="middle" font-size="22" fill="#e65100" font-family="Montserrat">द</text>
+        <text x="60" y="68" text-anchor="middle" font-size="22" fill="#e65100">द</text>
       </svg>
     </div>
     <div class="darshana-text">Welcome to DarShana</div>
-    <div class="tagline">भारत के हर कोने का दर्शन
-      <br><br>
+    <div class="tagline">
+      भारत के हर कोने का दर्शन<br><br>
       Discover festivals, nature, and heritage from every corner of Bharat.<br>
       Explore India's wonders, find travel inspiration, and immerse in culture!
     </div>
   </div>
-  <nav class="navbar" style="background-color: black; position:static;">
+  <!-- DarShana Ai Assistnat To basic question -->
+   <div id="chatbot-window">
+  <div id="chatbot-header">
+    Darshana Travel Assistant
+    <span id="chatbot-close">&times;</span>
+  </div>
+  <div id="chatbot-messages"></div>
+  <div id="chatbot-input-area">
+    <input type="text" id="chatbot-input" placeholder="Type your question..." autocomplete="off" />
+    <button id="chatbot-send-btn">►</button>
+  </div>
+</div>
+  <!-- DarShana Main Code... -->
+  <nav class="navbar" style="background-color: black; display: none;">
     <div class="logo">
       <span class="highlight" style="  font-family: 'Algebra', sans-serif;
   font-weight: normal;">Dar<span style="color:white;">Sh</span><span style="color:green;">ana</span>
@@ -39,22 +51,24 @@
     <div class="nav-links">
   <a href="#Home">Home</a>
   <a href="#step-indicator">Mood Analyzer</a>
-  <a href="#destination">Destinations</a>
-  <a href="#Fastivals">Festivals</a>
+  <a href="#Destination">Destinations</a>
+  <a href="#festival-cards">Festivals</a>
   <a href="#Sustainable">Sustainable Travel</a>
   <a href="#DarShana Chatbot">AI Assistant</a>
+  <a href="bookph.html">book ph/vd</a>
   </div> <!-- Close nav-links -->
   <div class="navbar-actions">
   <button id="settingsBtn" class="btn">⚙️ Settings</button>
   <div id="settingsMenu" class="settings-menu hidden">
-    <a href="#luxury">Luxury Train & Flight Ticket Book</a>
-    <a href="#registerTrip">Register Trip</a>
-    <a href="#aboutUs">About</a>
+    <a href="#trainTrack">Luxury Train & Flight Ticket Book</a>
+    <a href="#tripRegistrationForm">Register Trip</a>
+    <a href="localphoto.html" >Reg-Photographers</a>
+    <a href="About.html">AboutUs</a>
     <a href="#contactUs">Contact Us</a>
+    <a href="Admin.html">Admin Deshboard</a>
   </div>
   </div>
   <div class="navbar-buttons">
-      <button class="btn sign-in">Sign In</button>
       <button class="btn get-started" style="background-color: green;">Get Started</button>
   </div>
   </nav>
@@ -64,7 +78,7 @@
       <div class="hero-image-tile mountains"></div>
       <div class="hero-image-tile jaipur"></div>
     </div>
-    <div class="hero-content">
+    <div class="hero-content" id="Hero-content">
       <div class="hero-title">
         <span class="highlight" style="color:darkorange;">Dar</span><span style="color:white;">Sh</span><span style="color:green;">ana</span>
         <br>AI-Powered Travel
@@ -83,44 +97,8 @@
       </div>
     </div>
   </section>
-  <!-- Registration of Tip to India -->
-  <section id="registrationSection" class="registration-section" style="display:none; max-width:600px; margin: 40px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 12px; background:#fff;">
-  <h2>Trip & Travel Registration</h2>
-  <form id="tripRegistrationForm">
-    <label for="fullName">Full Name*</label>
-    <input type="text" id="fullName" name="fullName" required />
 
-    <label for="email">Email Address*</label>
-    <input type="email" id="email" name="email" required />
-
-    <label for="phone">Phone Number*</label>
-    <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="10-digit number" />
-
-    <label for="destination">Destination*</label>
-    <select id="destination" name="destination" required>
-      <option value="">Select Destination</option>
-      <option value="Udaipur">Udaipur</option>
-      <option value="Jaipur">Jaipur</option>
-      <option value="Goa">Goa</option>
-      <option value="Manali">Manali</option>
-      <option value="Varanasi">Varanasi</option>
-      <!-- Add more as needed -->
-    </select>
-
-    <label for="tripDate">Planned Trip Date*</label>
-    <input type="date" id="tripDate" name="tripDate" required />
-
-    <label for="duration">Duration (Days)*</label>
-    <input type="number" id="duration" name="duration" min="1" max="365" required />
-
-    <label for="preferences">Special Preferences</label>
-    <textarea id="preferences" name="preferences" placeholder="Any special requests or preferences..."></textarea>
-
-    <button type="submit" class="btn primary">Submit Registration</button>
-  </form>
-  <div id="registrationMessage" style="margin-top: 15px; font-weight: 600;"></div>
-</section>
-
+<!-- Revolutionary travel features -->
 <section class="features">
   <div class="container">
     <h2 class="section-title">Revolutionary Travel Features</h2>
@@ -185,12 +163,12 @@
         </div>
         <h3>Drone & Adventure Tours</h3>
         <p>
-          Get AI-powered recommendations for image click & video creating  by drone, bike & bicycle trails, 
+          Get AI-powered recommendations for image click & video creating by drone, bike & bicycle trails, 
           and forest adventure tours to make your journey more thrilling.
         </p>
       </div>
 
-      <!-- Card 6 (Updated) -->
+      <!-- Card 6 -->
       <div class="feature-card">
         <div class="icon bg-amber">
           <span>🎥</span>
@@ -205,6 +183,80 @@
     </div>
   </div>
 </section>
+
+
+<!-- Registration of Tip to India -->
+
+<section id="registrationSection" class="registration-section" aria-label="Trip & Travel Registration Form">
+  <h2>Trip & Travel Registration</h2>
+  <form id="tripRegistrationForm" novalidate>
+    <label for="fullName">Full Name*</label>
+    <input type="text" id="fullName" name="fullName" placeholder="Your full name" required />
+
+    <label for="email">Email Address*</label>
+    <input type="email" id="email" name="email" placeholder="example@mail.com" required />
+
+    <label for="phone">Phone Number*</label>
+    <input type="number" id="phone" name="phone" min="1000000000" max="9999999999" placeholder="Enter 10-digit phone number" required />
+
+    <label for="state">State*</label>
+    <select id="state" name="state" required>
+      <option value="">Select State</option>
+      <option value="Rajasthan">Rajasthan</option>
+      <option value="Goa">Goa</option>
+      <option value="Uttarakhand">Uttarakhand</option>
+      <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+      <option value="Kerala">Kerala</option>
+    </select>
+
+    <label for="destination">Preferred Place to Travel*</label>
+    <input type="text" id="destination" name="destination" placeholder="City or Attraction" required />
+
+    <label for="tripDate">Planned Trip Date*</label>
+    <input type="date" id="tripDate" name="tripDate" required />
+
+    <label for="duration">Duration (Days)*</label>
+    <input type="number" id="duration" name="duration" min="1" max="365" required />
+
+    <label for="preferences">Special Preferences</label>
+    <textarea id="preferences" name="preferences" placeholder="Any special requests or preferences..."></textarea>
+
+    <div class="photo-upload">
+      <label for="photoUpload">Upload Your Photo</label>
+      <input type="file" id="photoUpload" name="photoUpload" accept="image/*" />
+      <img id="photoPreview" class="preview-image" alt="Photograph Preview" />
+    </div>
+
+    <div class="driving-option">
+      <label>
+        <input type="checkbox" id="selfDrive" name="selfDrive" />
+        I will be driving my own vehicle
+      </label>
+    </div>
+
+    <button type="submit" class="btn primary">Submit Registration</button>
+  </form>
+  <div id="registrationMessage" role="alert" aria-live="polite"></div>
+</section>
+<!--  Trip & Travel Registration Slip -->
+<section id="slipContainer" style="display:none;" aria-live="polite" aria-atomic="true">
+  <h3>Trip & Travel Registration Slip</h3>
+  <img id="slipPhoto" alt="User Photo" />
+  <p><strong>Name:</strong> <span id="slipName"></span></p>
+  <p><strong>Email:</strong> <span id="slipEmail"></span></p>
+  <p><strong>Phone:</strong> <span id="slipPhone"></span></p>
+  <p><strong>State:</strong> <span id="slipState"></span></p>
+  <p><strong>Destination:</strong> <span id="slipDestination"></span></p>
+  <p><strong>Trip Date:</strong> <span id="slipTripDate"></span></p>
+  <p><strong>Duration:</strong> <span id="slipDuration"></span> days</p>
+  <p><strong>Preferences:</strong> <span id="slipPreferences"></span></p>
+  <p><strong>Driving Self:</strong> <span id="slipDrive"></span></p>
+
+  <button id="payConfirmBtn">Make Payment (₹10,000)</button>
+  <button id="downloadPDFBtn" style="display:none;">Download PDF Slip</button>
+  <div id="printMessage"></div>
+</section>
+
   <!-- AI recommandation -->
   <div class="container">
     <div id="step-indicator" class="step-indicator">
@@ -263,7 +315,7 @@
       <h3>Udaipur, Rajasthan</h3>
     </div>
     <div class="destination-card" onclick="showDetails('jaipur')">
-      <img src="https://www.tourism.rajasthan.gov.in/content/dam/rajasthan-tourism/english/city/explore/SRPG01.jpg" Jaipur" />
+      <img src="https://www.tourism.rajasthan.gov.in/content/dam/rajasthan-tourism/english/city/explore/SRPG01.jpg" alt="jaipur" />
       <h3>Jaipur, Rajasthan</h3>
     </div>
     <div class="destination-card" onclick="showDetails('varanasi')">
@@ -275,7 +327,7 @@
       <h3>Darjeeling, West Bengal</h3>
     </div>
     <div class="destination-card" onclick="showDetails('munnar')">
-      <img src="https://www.fabhotels.com/blog/wp-content/uploads/2018/07/featureImage600x400-5.jpg:cf-webp:w-450:h-240" alt="Munnar" />
+      <img src="https://www.fabhotels.com/blog/wp-content/uploads/2018/07/featureImage600x400-5.jpg" alt="Munnar" />
       <h3>Munnar, Kerala</h3>
     </div>
     <div class="destination-card" onclick="showDetails('rishikesh')">
@@ -469,11 +521,11 @@
   </main>
   <!-- AI assistent & feature's -->
   <main class="assistant-section">
-  <h2>AI Assistant & Safety Features</h2>
+  <h2 style="padding: 20px;">AI Assistant & Safety Features</h2>
   <p>AR-enabled guides, real-time updates, translation support, and comprehensive safety features for worry-free travel</p>
 
   <div class="features-row">
-    <div class="feature-card"><span>🛣️</span><div class="f-title">Real-time Traffic</div><div>Get live traffic updates and crowd information</div></div>
+    <div class="feature-card" ><span>🛣️</span><div class="f-title">Real-time Traffic</div><div>Get live traffic updates and crowd information</div></div>
     <div class="feature-card"><span>🌐</span><div class="f-title">AI Translation</div><div>Translate signs, menus, and conversations instantly</div></div>
     <div class="feature-card"><span>🛑</span><div class="f-title">Emergency Help</div><div>Quick access to emergency services and maps</div></div>
     <div class="feature-card"><span>🗺️</span><div class="f-title">Offline Access</div><div>Download itineraries and maps for offline use</div></div>
@@ -484,7 +536,9 @@
   <div class="ai-area" id="DarShana Chatbot">
     <div class="chat-area">
       <div class="chat-header">
-        <span class="ai-icon">🤖</span>
+        <div id="chatbot-icon" title="Chat with Darshana">
+  <img src="generated-image.png" alt="Darshana Chatbot Logo" />
+</div>
         <span class="ai-title">DarShana AI Travel Assistant <span class="ai-status online">● Online & Ready</span></span>
       </div>
         <div id="chatHistory" class="chat-history"></div>
@@ -520,6 +574,7 @@
   </div>
 </main>
   <!-- flight booking -->
+<div class="overlay" role="application">
   <div class="booking-tabs" role="tablist">
     <button class="tab active" role="tab" aria-selected="true" tabindex="0">Flights</button>
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">Hotels</button>
@@ -527,48 +582,60 @@
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">Bus</button>
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">Trains</button>
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">Cabs</button>
-    <button class="advisory-btn">Advisory & Covid Refund</button>
+    <button class="advisory-btn" type="button">Advisory & Covid Refund</button>
   </div>
-  <form class="booking-form" id="bookingForm" autocomplete="off" novalidate>
+
+  <form id="bookingForm" class="booking-form" autocomplete="off" novalidate>
     <div class="trip-types" role="radiogroup" aria-label="Trip Type">
       <label><input type="radio" name="tripType" value="oneway" checked /> One Way</label>
       <label><input type="radio" name="tripType" value="roundtrip" /> Round Trip</label>
       <label><input type="radio" name="tripType" value="multicity" /> Multi City</label>
     </div>
-    <div class="form-row">
-      <div class="field">
+
+    <div class="form-row" style="position:relative;">
+      <div class="field" style="flex:1; position:relative;">
         <label for="fromCity">Departure From</label>
-        <input type="text" id="fromCity" name="fromCity" value="New Delhi" aria-autocomplete="list" aria-controls="fromSuggest" aria-expanded="false" aria-haspopup="listbox" required />
+        <input type="text" id="fromCity" name="fromCity" value="New Delhi" aria-autocomplete="list" aria-controls="fromSuggest" aria-expanded="false" aria-haspopup="listbox" required autocomplete="off" />
         <div class="suggestions" id="fromSuggest" role="listbox" aria-label="From city suggestions" hidden></div>
       </div>
-      <span class="swap-btn" role="button" aria-label="Swap cities" tabindex="0">⇄</span>
-      <div class="field">
+
+      <button type="button" class="swap-btn" aria-label="Swap departure and destination cities" title="Swap cities">⇄</button>
+
+      <div class="field" style="flex:1; position:relative;">
         <label for="toCity">Going To</label>
-        <input type="text" id="toCity" name="toCity" value="Mumbai" aria-autocomplete="list" aria-controls="toSuggest" aria-expanded="false" aria-haspopup="listbox" required />
+        <input type="text" id="toCity" name="toCity" value="Mumbai" aria-autocomplete="list" aria-controls="toSuggest" aria-expanded="false" aria-haspopup="listbox" required autocomplete="off" />
         <div class="suggestions" id="toSuggest" role="listbox" aria-label="To city suggestions" hidden></div>
       </div>
-      <div class="field datefield">
+
+      <div class="field datefield" style="flex:1; min-width:140px;">
         <label for="departDate">Departure Date</label>
         <input type="date" id="departDate" name="departDate" value="2025-09-20" required />
       </div>
-      <div class="field datefield" id="returnField" style="display:none;">
+
+      <div class="field datefield" id="returnField" style="display:none; flex:1; min-width:140px;">
         <label for="returnDate">Return Date</label>
         <input type="date" id="returnDate" name="returnDate" />
       </div>
-      <div class="field traveller-field">
-        <label for="travellers">Travellers & Class</label>
-        <select id="travellers" name="travellers" aria-label="Number of travellers">
-          <option>1 Traveller</option>
-          <option>2 Travellers</option>
-          <option>3 Travellers</option>
-        </select>
-        <select id="classType" name="classType" aria-label="Class type">
-          <option>Economy</option>
-          <option>Premium Economy</option>
-          <option>Business</option>
-        </select>
+
+      <div class="field traveller-field" style="flex:1 1 240px; display:flex; gap:10px;">
+        <label style="flex-grow:1;">
+          Travellers &amp; Class
+          <select id="travellers" name="travellers" aria-label="Number of travellers" style="width:100%;">
+            <option>1 Traveller</option>
+            <option>2 Travellers</option>
+            <option>3 Travellers</option>
+          </select>
+        </label>
+        <label style="flex-grow:1;">
+          <select id="classType" name="classType" aria-label="Class type" style="width:100%;">
+            <option>Economy</option>
+            <option>Premium Economy</option>
+            <option>Business</option>
+          </select>
+        </label>
       </div>
     </div>
+
     <div class="options-row">
       <label><input type="radio" name="fareType" checked /> Regular Regular Fares</label>
       <label><input type="radio" name="fareType" /> Student Extra Baggage</label>
@@ -576,108 +643,143 @@
       <label><input type="radio" name="fareType" /> Senior Citizen Extra Discount</label>
       <label><input type="checkbox" id="nonStop" /> Non-Stop Flights</label>
     </div>
+
     <button type="submit" class="search-btn">Search</button>
   </form>
-  <div id="bookingResult" role="region" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- flight ticket Specail offer -->
-  <div class="offers-section" id="Luxury">
-  <div class="offers-title">Special Offers</div>
-  <div class="slider-row">
-    <div class="carousel-controls">
-      <button class="slider-btn" id="prevBtn">&#8592;</button>
-      <button class="slider-btn" id="nextBtn">&#8594;</button>
-    </div>
-    <div id="sliderTrack" class="slider-track"></div>
-  </div>
-  <div class="offers-view">
-    <a href="#">View all offers &rarr;</a>
-  </div>
+  <div id="bookingResult" role="region" aria-live="polite" aria-atomic="true" tabindex="0"></div>
 </div>
+  <!-- flight ticket Specail offer -->
+   <div class="offers-section" id="Luxury"> 
+    <div class="offers-title">✈️ Special Flight Offers</div> 
+    <div class="slider-row"> 
+      <div class="slider-controls"> 
+        <button class="slider-btn" id="prevBtn">&#8592;</button> 
+        <button class="slider-btn" id="nextBtn">&#8594;</button> 
+      </div> 
+      <div id="sliderTrack" class="slider-track"></div> 
+    </div> 
+    <div class="offers-view"> 
+      <a href="#">View all offers &rarr;</a> 
+    </div> 
+  </div>
   <!-- Luxury trains view's -->
-     <div class="luxury-header">
+   
+<section class="luxury-section">
+  <h2 class="luxury-header">
     Experience <span class="special">Luxury Trains</span> in India
-  </div>
-  <div class="luxury-carousel">
-    <div class="carousel-controls">
-      <button class="carousel-btn" id="prevBtn">&#8592;</button>
-      <button class="carousel-btn" id="nextBtn">&#8594;</button>
-    </div>
-    <div id="trainTrack" class="train-track"></div>
-  </div>
-  <!-- feature and feed back -->
-  <div class="service-title">DarShana Other Services</div>
-  <div class="service-cards">
-    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&q=80&w=450');">
-      <div class="card-content">
-        <div class="card-label">Adventure</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&q=80&w=450');">
-      <div class="card-content">
-        <div class="card-label">MICE</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&q=80&w=600');">
-      <div class="card-content">
-        <div class="card-label">Cruise</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1529148482759-b35b25c38739?auto=format&q=80&w=450');">
-      <div class="card-content">
-        <div class="card-label">Villas & Stays</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-    <div class="card" style="background-image:url('https://images.luxurytrainsofindia.in/wp-content/uploads/2018/08/golden-chariot-train-exterior.jpg');">
-      <div class="card-content">
-        <div class="card-label">Luxury Trains</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&q=80&w=450');">
-      <div class="card-content">
-        <div class="card-label">Monuments</div>
-        <div class="card-link">Plan my Trip &rarr;</div>
-      </div>
-    </div>
-  </div>
+  </h2>
 
-  <div class="feature-section">
-    <div class="feature-title">
-      Our <span class="highlight">Featured Program</span> of The Month
+  <div class="luxury-carousel">
+    <div id="trainTrack" class="train-track"></div>
+
+    <button class="carousel-btn prev" id="prevBtn">❮</button>
+    <button class="carousel-btn next" id="nextBtn">❯</button>
+  </div>
+</section>
+
+<!-- DarShana Services + Feature Section (HTML) -->
+<section class="darshana-services">
+  <div class="container">
+    <div class="service-header">
+      <h2 class="site-title">DarShana <span class="accent">Other Services</span></h2>
+      <p class="lead">Handcrafted experiences — adventure, luxury, culture & more. Let us plan it for you.</p>
     </div>
-    <div class="feature-row">
-      <div class="feature-card" style="background:#ffb82e;">
+
+    <div class="service-cards" aria-label="Other Services">
+      <div class="card" style="background-image:url('https://www.holidaytourstravel.com/wp-content/uploads/2021/11/tra-turkey-hot-air-balloon-adventure-activity-1024x683.jpg');">
+        <div class="card-overlay">
+          <div class="card-label">Adventure</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
+        </div>
       </div>
-      <div class="feature-card" style="background-image:url('https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&q=80&w=600');">
+
+      <div class="card" style="background-image:url('https://i.ytimg.com/vi/kivEqi9rUfk/hqdefault.jpg');">
+        <div class="card-overlay">
+          <div class="card-label">MICE</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
+        </div>
       </div>
-      <div class="feature-card program-large" style="background-image:url('https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&q=80&w=900');">
-        <div class="feature-content">
-          <div class="feature-main">Explore KARNATAKA</div>
-          <div class="feature-desc">Bangalore - Coorg - Kabini - Mysore - Hospet - Badami - Goa</div>
-          <div class="feature-extra">Duration: 13 Days and 12 Nights</div>
+
+      <div class="card" style="background-image:url('https://seemamatravel.com/wp-content/uploads/2019/06/Cruise-CarnivalCruiseLine.jpg');">
+        <div class="card-overlay">
+          <div class="card-label">Cruise</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
+        </div>
+      </div>
+
+      <div class="card" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/495322445.jpg?k=e55274893c8125952ce2dfe5dffe016a8885a625184c57659d5ca88620335a6c&o=&hp=1');">
+        <div class="card-overlay">
+          <div class="card-label">Villas & Stays</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
+        </div>
+      </div>
+
+      <div class="card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbP2khdWtX49mbPMYR6FWYwvoHZfUh50rOocL5HO9GeVbtXWVzLXvMUGN9g-HUlO1TExg&usqp=CAU');">
+        <div class="card-overlay">
+          <div class="card-label">Luxury Trains</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
+        </div>
+      </div>
+
+      <div class="card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBcfq5tiLpIS-Bdv_9ln4Hc9I70GSxlHwUOr9hLQ_CUlUVk4ZpEAt3uikV85V1pIG-WvY&usqp=CAU');">
+        <div class="card-overlay">
+          <div class="card-label">Monuments</div>
+          <a href="#" class="card-cta">Plan my Trip →</a>
         </div>
       </div>
     </div>
-</div>
-    <div class="pay-section">
-    <div class="pay-title">Security & Payments</div>
-    <div class="pay-icons">
-      <img src="https://cdn-icons-png.flaticon.com/128/911/911257.png" alt="PCI DSS" />
-      <img src="https://cdn-icons-png.flaticon.com/128/243/243128.png" alt="Verified" />
-      <img src="https://cdn-icons-png.flaticon.com/128/784/784970.png" alt="Net Banking" />
-      <img src="https://cdn-icons-png.flaticon.com/128/7837/7837053.png" alt="EMI" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mastercard-logo.png" alt="Mastercard" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/RuPay_Logo.png" alt="RuPay" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Diners_Club_Logo.svg/1280px-Diners_Club_Logo.svg.png" alt="Diners Club" />
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" />
+
+    <!-- Features section -->
+    <div class="feature-section">
+      <div class="feature-head">
+        <h3>Our <span class="highlight">Featured Program</span> of The Month</h3>
+        <p class="feature-sub">Exclusive curated itinerary — limited seats. Experience the best of India.</p>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-card small" style="background: linear-gradient(135deg,#ffb82e,#ff9a1f);">
+          <div class="feature-inner">
+            <div class="pill">Special Offer</div>
+            <h4>Save up to 18%</h4>
+            <p class="tiny">Book by 15 Oct • T&Cs apply</p>
+          </div>
+        </div>
+
+        <div class="feature-card medium" style="background-image:url('https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&q=80&w=1200');">
+          <div class="feature-inner glass">
+            <h4>Hidden Gems</h4>
+            <p>Local-guided experiences, culinary walks & offbeat routes.</p>
+          </div>
+        </div>
+      <div class="feature-card program-large" style="background-image:url('https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&q=80&w=900');">
+      <div class="feature-content">
+        <div class="feature-main">Explore KARNATAKA</div>
+        <div class="feature-desc">Bangalore - Coorg - Kabini - Mysore - Hospet - Badami - Goa</div>
+        <div class="feature-extra">Duration: 13 Days and 12 Nights</div>
+      </div>
+    </div>
+      </div>
     </div>
   </div>
+</section>
+<!-- Security & Payments Section -->
+<div class="pay-section">
+  <h3 class="pay-title">🔒 Security & Payments</h3>
+  <p class="pay-subtitle">Your transactions are safe with trusted partners</p>
+  <div class="pay-icons">
+  <img src="https://cdn-icons-png.flaticon.com/128/911/911257.png" alt="PCI DSS Compliance" />
+  <img src="https://cdn-icons-png.flaticon.com/128/243/243128.png" alt="Verified Payment" />
+  <img src="https://cdn-icons-png.flaticon.com/128/784/784970.png" alt="Net Banking" />
+  <img src="https://cdn-icons-png.flaticon.com/128/7837/7837053.png" alt="EMI Option" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa Card" />
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5LLCKGiA1A54u5bl67CTTP8v9eaDQWTllIw&s" alt="Mastercard" />
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO2w57dIDiMf086cFOvnFwbEU-M9Qu4UyWTj3ifik-uCMZxHDAZHe7gnhVlFP8SxzVKmI&usqp=CAU" alt="RuPay Card" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="American Express" />
+  <img src="https://static.wixstatic.com/media/6adf10_25103e9c4cfa42e9a68eba68ff6c1c54~mv2.jpeg/v1/fill/w_568,h_320,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/6adf10_25103e9c4cfa42e9a68eba68ff6c1c54~mv2.jpeg" alt="UPI Payment" style="max-height:48px; max-width:80px;" />
+</div>
+
+</div>
   <br><br><br><br>
   <!-- last slide footer -->
     <div class="hero-gradient">
@@ -753,72 +855,15 @@
   text-fill-color: transparent;">
       © 2025 DarShana. All rights reserved.
       <span class="footer-legal">
-        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | Made with Readdy
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
       </span>
     </div>
   </footer>
   <script src="script.js"></script>
-  <script>// Flight offers data array with images
-const flightOffers = [
-  { 
-    title: "Mumbai to Delhi - 25% Off", 
-    details: "Book before Sep 30!",
-    image: "https://www.yatra.com/ythomepagecms/media/todayspick/2025/Jul/17de39dc1751e46e6b5e616b1b06fdaf.jpg"
-  },
-  { 
-    title: "Bangalore to Goa - Flat ₹1000 Off", 
-    details: "Weekend discount!",
-    image: "https://cdn.grabon.in/gograbon/images/web-images/uploads/1753449562595/Air-india-coupons.jpg"
-  },
-  { 
-    title: "Chennai to Kolkata - Save 15%", 
-    details: "Limited seats!",
-    image: "https://www.icicibank.com/content/dam/icicibank/india/managed-assets/images/offer-zone/malaysia-airlines-banner.webp"
-  },
-  { 
-    title: "Hyderabad to Jaipur - ₹500 Off", 
-    details: "Special Dussehra Offer!",
-    image: "https://www.yatra.com/ythomepagecms/media/todayspick_home/2025/Jul/88407860a64b7037bcaeeb62e985b827.jpg"
-  }
-];
-
-// Get reference to slider track container
-const sliderTrack = document.getElementById('sliderTrack');
-let currentIndex = 0;
-
-// Function to render current offer with image
-function renderOffer(index) {
-  sliderTrack.innerHTML = `
-    <div class="offer-card">
-      <img src="${flightOffers[index].image}" alt="${flightOffers[index].title}" class="offer-image" />
-      <div class="offer-text">
-        <div class="offer-title">${flightOffers[index].title}</div>
-        <div class="offer-details">${flightOffers[index].details}</div>
-      </div>
-    </div>
-  `;
-}
-
-// Initial rendering of the first offer
-renderOffer(currentIndex);
-
-// Previous button click - show previous offer
-document.getElementById('prevBtn').addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + flightOffers.length) % flightOffers.length;
-  renderOffer(currentIndex);
-});
-
-// Next button click - show next offer
-document.getElementById('nextBtn').addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % flightOffers.length;
-  renderOffer(currentIndex);
-});
-
-// DarShana logo Animation Function
-    setTimeout(function(){
-      document.getElementById('logo-container').style.opacity = "0";
-    }, 4600); // Animation duration before homepage reveal
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="scripts.js"></script>
+<script src="logo.js"></script>
+<script src="trip.js"></script>
+<script src="chatbot.js"></script>
 </body>
 </html>
