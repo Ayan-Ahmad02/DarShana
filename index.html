@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DarShana - AI-Powered Travel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Newlans:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="AiStyle.css">
+  <link rel="stylesheet" href="design.css">
+  <link rel="stylesheet" href="traveling.css">
+  <link href="https://fonts.cdnfonts.com/css/algebra" rel="stylesheet">
+
+</head>
+<body>
+  <!-- DarShana Logo Animation -->
+    <div id="logo-container">
+    <div class="logo-symbol">
+      <!-- Inspired by mandala & Indian map pinch -->
+      <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="#e65100" stroke-width="6" />
+        <path d="M60,10 Q70,30 60,50 Q50,30 60,10" fill="#F4CA69" stroke="#e65100" stroke-width="2"/>
+        <path d="M60,110 Q70,90 60,70 Q50,90 60,110" fill="#F4CA69" stroke="#e65100" stroke-width="2"/>
+        <circle cx="60" cy="60" r="22" fill="#fffbe6" stroke="#e65100" stroke-width="4"/>
+        <text x="60" y="68" text-anchor="middle" font-size="22" fill="#e65100" font-family="Montserrat">द</text>
+      </svg>
+    </div>
+    <div class="darshana-text">Welcome to DarShana</div>
+    <div class="tagline">भारत के हर कोने का दर्शन
+      <br><br>
+      Discover festivals, nature, and heritage from every corner of Bharat.<br>
+      Explore India's wonders, find travel inspiration, and immerse in culture!
+    </div>
+  </div>
+  <nav class="navbar" style="background-color: black; position:static;">
+    <div class="logo">
+      <span class="highlight" style="  font-family: 'Algebra', sans-serif;
+  font-weight: normal;">Dar<span style="color:white;">Sh</span><span style="color:green;">ana</span>
+    </div>
+    <div class="nav-links">
+  <a href="#Home">Home</a>
+  <a href="#step-indicator">Mood Analyzer</a>
+  <a href="#destination">Destinations</a>
+  <a href="#Fastivals">Festivals</a>
+  <a href="#Sustainable">Sustainable Travel</a>
+  <a href="#DarShana Chatbot">AI Assistant</a>
+  </div> <!-- Close nav-links -->
+  <div class="navbar-actions">
+  <button id="settingsBtn" class="btn">⚙️ Settings</button>
+  <div id="settingsMenu" class="settings-menu hidden">
+    <a href="#luxury">Luxury Train & Flight Ticket Book</a>
+    <a href="#registerTrip">Register Trip</a>
+    <a href="#aboutUs">About</a>
+    <a href="#contactUs">Contact Us</a>
+  </div>
+  </div>
+  <div class="navbar-buttons">
+      <button class="btn sign-in">Sign In</button>
+      <button class="btn get-started" style="background-color: green;">Get Started</button>
+  </div>
+  </nav>
+  <section class="hero">
+    <div class="hero-images">
+      <div class="hero-image-tile tajmahal"></div>
+      <div class="hero-image-tile mountains"></div>
+      <div class="hero-image-tile jaipur"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-title">
+        <span class="highlight" style="color:darkorange;">Dar</span><span style="color:white;">Sh</span><span style="color:green;">ana</span>
+        <br>AI-Powered Travel
+      </div>
+      <div class="hero-desc" style="  background: linear-gradient(90deg, orange 20%, white 50%, green 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;">
+        Smart AI analyzes your emotions to deliver personalized destination experiences.<br>
+        Discover festivals, sustainable routes, and hidden gems with comprehensive safety features.
+      </div>
+      <div class="hero-buttons">
+        <button class="btn primary">Start Mood Analysis</button>
+        <button class="btn secondary">Watch Demo</button>
+      </div>
+    </div>
+  </section>
+  <!-- Registration of Tip to India -->
+  <section id="registrationSection" class="registration-section" style="display:none; max-width:600px; margin: 40px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 12px; background:#fff;">
+  <h2>Trip & Travel Registration</h2>
+  <form id="tripRegistrationForm">
+    <label for="fullName">Full Name*</label>
+    <input type="text" id="fullName" name="fullName" required />
+
+    <label for="email">Email Address*</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="phone">Phone Number*</label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="10-digit number" />
+
+    <label for="destination">Destination*</label>
+    <select id="destination" name="destination" required>
+      <option value="">Select Destination</option>
+      <option value="Udaipur">Udaipur</option>
+      <option value="Jaipur">Jaipur</option>
+      <option value="Goa">Goa</option>
+      <option value="Manali">Manali</option>
+      <option value="Varanasi">Varanasi</option>
+      <!-- Add more as needed -->
+    </select>
+
+    <label for="tripDate">Planned Trip Date*</label>
+    <input type="date" id="tripDate" name="tripDate" required />
+
+    <label for="duration">Duration (Days)*</label>
+    <input type="number" id="duration" name="duration" min="1" max="365" required />
+
+    <label for="preferences">Special Preferences</label>
+    <textarea id="preferences" name="preferences" placeholder="Any special requests or preferences..."></textarea>
+
+    <button type="submit" class="btn primary">Submit Registration</button>
+  </form>
+  <div id="registrationMessage" style="margin-top: 15px; font-weight: 600;"></div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">Revolutionary Travel Features</h2>
+    <p class="section-subtitle">
+      Experience the future of travel with AI-powered personalization, sustainable planning,
+      and comprehensive safety features designed for modern explorers.
+    </p>
+
+    <div class="features-grid">
+      <!-- Card 1 -->
+      <div class="feature-card">
+        <div class="icon bg-purple">
+          <span>😊</span>
+        </div>
+        <h3>Mood Analysis</h3>
+        <p>
+          AI analyzes your emotions to suggest destinations that perfectly
+          match your current state of mind and travel preferences.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card">
+        <div class="icon bg-green">
+          <span>📅</span>
+        </div>
+        <h3>Festival Discovery</h3>
+        <p>
+          Discover vibrant festivals, local treasures, and cultural
+          experiences happening during your visit across India.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card">
+        <div class="icon bg-emerald">
+          <span>🌱</span>
+        </div>
+        <h3>Sustainable Routes</h3>
+        <p>
+          Map-based planner highlights eco-friendly routes with walking,
+          cycling, and public transit options while earning rewards.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feature-card">
+        <div class="icon bg-red">
+          <span>📸</span>
+        </div>
+        <h3>AI Safety Assistant</h3>
+        <p>
+          AR-enabled guides, real-time traffic updates, translation support,
+          and emergency assistance for comprehensive safety.
+        </p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feature-card">
+        <div class="icon bg-blue">
+          <span>🚁</span>
+        </div>
+        <h3>Drone & Adventure Tours</h3>
+        <p>
+          Get AI-powered recommendations for image click & video creating  by drone, bike & bicycle trails, 
+          and forest adventure tours to make your journey more thrilling.
+        </p>
+      </div>
+
+      <!-- Card 6 (Updated) -->
+      <div class="feature-card">
+        <div class="icon bg-amber">
+          <span>🎥</span>
+        </div>
+        <h3>Photo & Video Services</h3>
+        <p>
+          Hire verified local photographers and videographers, book drone 
+          shoots, and capture your travel memories with professional quality. 
+          Easy booking and instant sharing available.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- AI recommandation -->
+  <div class="container">
+    <div id="step-indicator" class="step-indicator">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    <div id="steps"></div>
+  </div>
+  <!-- discovering fastivals and culture event -->
+    <section class="festivals-section" id="fastivals">
+    <div class="festivals-header">
+      <h2>Discover Festivals & Local Treasures</h2>
+      <p>Experience India's vibrant spirit through festivals, foods, traditions & hidden gems happening during your visit.</p>
+    </div>
+    <div class="festivals-filters">
+      <button class="filter-btn selected" data-type="all">All Festivals</button>
+      <button class="filter-btn" data-type="religious">Religious</button>
+      <button class="filter-btn" data-type="cultural">Cultural</button>
+      <select id="month-select">
+        <option value="all">All Months</option>
+        <option value="jan">January</option>
+        <option value="feb">February</option>
+        <option value="mar">March</option>
+        <option value="apr">April</option>
+        <option value="may">May</option>
+        <option value="jun">June</option>
+        <option value="jul">July</option>
+        <option value="aug">August</option>
+        <option value="sep">September</option>
+        <option value="oct">October</option>
+        <option value="nov">November</option>
+        <option value="dec">December</option>
+      </select>
+    </div>
+    <div id="festival-cards" class="festival-cards"></div>
+  </section>
+  <!-- Map section review a fastivels in a Map  -->
+    <main class="map-section">
+    <h2 class="map-title">Festival Map of India</h2>
+    <p class="map-subtitle">Explore festivals happening across different regions</p>
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4921273.394717163!2d74.19084571018187!3d22.28215315342937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635c5d0c8e85b9%3A0x21d08c6f6c6d3f16!2sIndia!5e0!3m2!1sen!2sin!4v1695065365063!5m2!1sen!2sin"
+        width="100%" height="450" style="border:0;"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </main>
+  <section class="destination-section" id="destination">
+  <h2>Explore Top Indian Destinations</h2>
+  <div class="destinations" id="Destination">
+    <div class="destination-card" onclick="showDetails('udaipur')">
+      <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/731645090.jpg?k=8e61095816002085898b2b028400849a3eba751db7e7f34b3915a8cf57f8c6fc&o=&hp=1" alt="Udaipur" />
+      <h3>Udaipur, Rajasthan</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('jaipur')">
+      <img src="https://www.tourism.rajasthan.gov.in/content/dam/rajasthan-tourism/english/city/explore/SRPG01.jpg" Jaipur" />
+      <h3>Jaipur, Rajasthan</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('varanasi')">
+      <img src="https://servdharm.com/cdn/shop/articles/Wallpaper_900x.jpg?v=1694405183" alt="Varanasi" />
+      <h3>Varanasi, Uttar Pradesh</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('darjeeling')">
+      <img src="https://thumbs.dreamstime.com/b/darjeeling-india-apr-ghum-railway-station-himalayan-west-bengal-part-world-heritage-site-mountain-railways-188479982.jpg" alt="Darjeeling" />
+      <h3>Darjeeling, West Bengal</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('munnar')">
+      <img src="https://www.fabhotels.com/blog/wp-content/uploads/2018/07/featureImage600x400-5.jpg:cf-webp:w-450:h-240" alt="Munnar" />
+      <h3>Munnar, Kerala</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('rishikesh')">
+      <img src="https://media.holidify.com/images/cmsuploads/compressed/laxman-jhula-rishikesh_20241205131202.jpg" alt="Rishikesh" />
+      <h3>Rishikesh, Uttarakhand</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('leh')">
+      <img src="https://res.cloudinary.com/ddjuftfy2/image/upload/f_webp,c_fill,q_auto/memphis/xlarge/300049555_Leh-Ladakh.jpg" alt="Leh" />
+      <h3>Leh, Ladakh</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('amritsar')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiAS5uiPHNbQ6-JcP_f10nVuuA_cC4kz4ipg&s" alt="Amritsar" />
+      <h3>Amritsar, Punjab</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('goa')">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/fc/f0/goa.jpg?w=600&h=500&s=1" alt="Goa" />
+      <h3>Goa</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('khajuraho')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNemzzVQ4UCMR-JvvNhQcDqnq2FYJ2oi2weA&s" alt="Khajuraho" />
+      <h3>Khajuraho, Madhya Pradesh</h3>
+    </div>
+    <div class="destination-card" onclick="showDetails('delhi')">
+  <img src="https://www.competitiveness.in/wp-content/uploads/2017/09/SCR_2012_Press_Release.jpg" alt="Delhi" />
+  <h3>Delhi</h3>
+</div>
+  <div class="destination-card" onclick="showDetails('ajmer')">
+  <img src="https://c.ndtvimg.com/2020-10/oedsacsc_ajmer-dargah-eidemiladunnabi-pti-photo_625x300_29_October_20.jpg?im=FeatureCrop,algorithm=dnn,width=545,height=307" alt="Ajmer" />
+  <h3>Ajmer, Rajasthan</h3>
+</div>
+    <!-- Add more cards here for additional destinations -->
+  </div>
+  <div id="destinationDetails" class="destination-details"></div>
+</section>
+  <!--Sustainable & Responsible Tourism -->
+    <main>
+           <h2>Sustainable & Responsible Tourism</h2>
+    <div class="eco-summary" id="Sustainable">
+      <div class="eco-impact eco-points">
+        <span class="eco-value">1250</span><br>Eco Points
+      </div>
+      <div class="eco-impact eco-co2">
+        <span class="eco-value">45.2</span><br>kg CO₂ Saved
+      </div>
+      <div class="eco-impact eco-trees">
+        <span class="eco-value">28</span><br>Trees Planted
+      </div>
+    </div>
+    <h3>Choose Your Green Transport</h3>
+    <div class="green-row">
+      <div class="green-card">
+        <span>🚶‍♂️</span>
+        <div class="g-title">Walking Routes</div>
+        <div>Emission: 0 kg CO₂</div>
+        <div>Time: 15-45 mins</div>
+        <div>Reward: +50 points</div>
+        <div class="g-desc">Explore local neighborhoods on foot</div>
+      </div>
+      <div class="green-card">
+        <span>🚲</span>
+        <div class="g-title">Cycling Paths</div>
+        <div>Emission: 0 kg CO₂</div>
+        <div>Time: 10-30 mins</div>
+        <div>Reward: +75 points</div>
+        <div class="g-desc">Bike-friendly routes through scenic areas</div>
+      </div>
+      <div class="green-card">
+        <span>🚆</span>
+        <div class="g-title">Public Transit</div>
+        <div>Emission: 2.5 kg CO₂</div>
+        <div>Time: 20-60 mins</div>
+        <div>Reward: +25 points</div>
+        <div class="g-desc">Efficient metro, bus, and train connections</div>
+      </div>
+      <div class="green-card">
+        <span>🚗</span>
+        <div class="g-title">Electric Vehicles</div>
+        <div>Emission: 1.2 kg CO₂</div>
+        <div>Time: 15-40 mins</div>
+        <div>Reward: +40 points</div>
+        <div class="g-desc">E-rickshaws and electric car rentals</div>
+      </div>
+    </div>
+    <br>
+    <br>
+    Smart roater Plane
+    <h2>Smart Route Planner</h2>
+
+<div style="text-align:center; margin-bottom:20px;">
+  <label for="fromSelect">From:</label>
+  <select id="fromSelect">
+    <option value="">--Select From--</option>
+    <option value="Red Fort">Red Fort (Delhi)</option>
+    <option value="India Gate">India Gate (Delhi)</option>
+    <option value="Jaipur">Jaipur (Rajasthan)</option>
+    <option value="Ajmer">Ajmer (Rajasthan)</option>
+    <option value="Udaipur">Udaipur (Rajasthan)</option>
+    <option value="Haji Ali Dargah">Haji Ali Dargah (Mumbai)</option>
+    <option value="Gateway of India">Gateway of India (Mumbai)</option>
+    <option value="Munnar">Munnar (Kerala)</option>
+    <option value="Alleppey">Alleppey (Kerala)</option>
+    <option value="Rishikesh">Rishikesh (Uttarakhand)</option>
+    <option value="Nainital">Nainital (Uttarakhand)</option>
+    <option value="Varanasi">Varanasi (Uttar Pradesh)</option>
+    <option value="Taj Mahal">Taj Mahal (Agra, UP)</option>
+    <option value="Agra Fort">Agra Fort (Agra, UP)</option>
+    <option value="Madurai">Madurai (Tamil Nadu)</option>
+    <option value="Darjeeling">Darjeeling (West Bengal)</option>
+    <option value="marine drive">marine drive</option>
+    <option value="chowpatty">chowpatty</option>
+  </select>
+
+  <label for="toSelect">To:</label>
+  <select id="toSelect">
+    <option value="">--Select To--</option>
+    <option value="Red Fort">Red Fort (Delhi)</option>
+    <option value="India Gate">India Gate (Delhi)</option>
+    <option value="Jaipur">Jaipur (Rajasthan)</option>
+    <option value="Ajmer">Ajmer (Rajasthan)</option>
+    <option value="Udaipur">Udaipur (Rajasthan)</option>
+    <option value="Haji Ali Dargah">Haji Ali Dargah (Mumbai)</option>
+    <option value="Gateway of India">Gateway of India (Mumbai)</option>
+    <option value="Munnar">Munnar (Kerala)</option>
+    <option value="Alleppey">Alleppey (Kerala)</option>
+    <option value="Rishikesh">Rishikesh (Uttarakhand)</option>
+    <option value="Nainital">Nainital (Uttarakhand)</option>
+    <option value="Varanasi">Varanasi (Uttar Pradesh)</option>
+    <option value="Taj Mahal">Taj Mahal (Agra, UP)</option>
+    <option value="Agra Fort">Agra Fort (Agra, UP)</option>
+    <option value="Madurai">Madurai (Tamil Nadu)</option>
+    <option value="Darjeeling">Darjeeling (West Bengal)</option>
+    <option value="marine drive">marine drive</option>
+    <option value="chowpatty">chowpatty</option>
+  </select>
+  <br><br>
+  <button onclick="swapLocations()">Swap</button>
+  <button onclick="showRoute()">Show Route</button>
+</div>
+
+<div id="routeContainer"></div>
+
+
+    <h2>Sustainability Rewards</h2>
+    <div class="rewards-row">
+      <div class="reward-card achieved">
+        <span class="reward-icon">🌿</span>
+        <div class="reward-title">Eco Warrior</div>
+        <div class="reward-sub">500 points required<br>✓ Achieved!</div>
+        <div class="reward-desc">10% off on eco-friendly accommodations</div>
+      </div>
+      <div class="reward-card achieved">
+        <span class="reward-icon">♻️</span>
+        <div class="reward-title">Green Explorer</div>
+        <div class="reward-sub">1000 points required<br>✓ Achieved!</div>
+        <div class="reward-desc">Free bicycle rental for a day</div>
+      </div>
+      <div class="reward-card">
+        <span class="reward-icon">🌎</span>
+        <div class="reward-title">Climate Champion</div>
+        <div class="reward-sub">2000 points required</div>
+        <div class="reward-desc">Carbon offset certificate + tree planting</div>
+        <div class="reward-progress"><div class="progress-bar" style="width: 60%;"></div></div>
+      </div>
+      <div class="reward-card">
+        <span class="reward-icon">🌱</span>
+        <div class="reward-title">Sustainability Master</div>
+        <div class="reward-sub">5000 points required</div>
+        <div class="reward-desc">Free eco-tour experience</div>
+        <div class="reward-progress"><div class="progress-bar" style="width: 25%;"></div></div>
+      </div>
+    </div>
+
+    <h2>Carbon Footprint Calculator</h2>
+    <form id="carbonForm" class="carbon-form">
+      <div>
+        <label>Trip Duration (days)</label>
+        <input type="number" id="tripdays" value="7" min="1" />
+      </div>
+      <div>
+        <label>Transportation Type</label>
+        <select id="transporttype">
+          <option value="flight">Flight</option>
+          <option value="train">Train</option>
+          <option value="bus">Bus</option>
+          <option value="car">Car</option>
+        </select>
+      </div>
+      <button type="submit">Calculate Impact</button>
+    </form>
+    <div id="carbonResult"></div>
+  </main>
+  <!-- AI assistent & feature's -->
+  <main class="assistant-section">
+  <h2>AI Assistant & Safety Features</h2>
+  <p>AR-enabled guides, real-time updates, translation support, and comprehensive safety features for worry-free travel</p>
+
+  <div class="features-row">
+    <div class="feature-card"><span>🛣️</span><div class="f-title">Real-time Traffic</div><div>Get live traffic updates and crowd information</div></div>
+    <div class="feature-card"><span>🌐</span><div class="f-title">AI Translation</div><div>Translate signs, menus, and conversations instantly</div></div>
+    <div class="feature-card"><span>🛑</span><div class="f-title">Emergency Help</div><div>Quick access to emergency services and maps</div></div>
+    <div class="feature-card"><span>🗺️</span><div class="f-title">Offline Access</div><div>Download itineraries and maps for offline use</div></div>
+    <div class="feature-card"><span>🛡️</span><div class="f-title">Smart Backup</div><div>Automated backup plans for disrupted travel</div></div>
+    <div class="feature-card"><span>📷</span><div class="f-title">AR Guides</div><div>Point your camera for interactive information</div></div>
+  </div>
+
+  <div class="ai-area" id="DarShana Chatbot">
+    <div class="chat-area">
+      <div class="chat-header">
+        <span class="ai-icon">🤖</span>
+        <span class="ai-title">DarShana AI Travel Assistant <span class="ai-status online">● Online & Ready</span></span>
+      </div>
+        <div id="chatHistory" class="chat-history"></div>
+  <form id="chatForm" class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Ask me anything about your travel..." autocomplete="off" required />
+    <button type="submit">▶</button>
+    <button type="button" id="voiceBtn" aria-label="Speak your question" title="Speak your question">🎤</button>
+  </form>
+    </div>
+
+    <div class="quick-area">
+      <div class="quick-box">
+        <div class="quick-title">Quick Actions</div>
+        <div class="quick-list">
+          <div data-q="What is the traffic like to Red Fort?">What's the traffic like to Red Fort?</div>
+          <div data-q="Translate this menu for me">Translate this menu for me</div>
+          <div data-q="Find nearest hospital">Find nearest hospital</div>
+          <div data-q="Download offline maps">Download offline maps</div>
+          <div data-q="Create backup plan">Create backup plan</div>
+          <div data-q="Show AR information">Show AR information</div>
+        </div>
+      </div>
+
+      <div class="emergency-box">
+        <div class="em-title">🚨 Emergency Services</div>
+        <button class="em-btn red" onclick="sendEmergency('Emergency Call 108')">Emergency Call 108</button>
+        <button class="em-btn blue" onclick="sendEmergency('Police 112')">Police 112</button>
+        <button class="em-btn orange" onclick="sendEmergency('Fire Brigade 101')">Fire Brigade 101</button>
+        <button class="em-btn green" onclick="sendEmergency('Forest Police')">Forest Police</button>
+        <button class="em-btn pink" onclick="sendEmergency('Women Safety')">Women Safety</button>
+      </div>
+    </div>
+  </div>
+</main>
+  <!-- flight booking -->
+  <div class="booking-tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true" tabindex="0">Flights</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">Hotels</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">Holidays</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">Bus</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">Trains</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">Cabs</button>
+    <button class="advisory-btn">Advisory & Covid Refund</button>
+  </div>
+  <form class="booking-form" id="bookingForm" autocomplete="off" novalidate>
+    <div class="trip-types" role="radiogroup" aria-label="Trip Type">
+      <label><input type="radio" name="tripType" value="oneway" checked /> One Way</label>
+      <label><input type="radio" name="tripType" value="roundtrip" /> Round Trip</label>
+      <label><input type="radio" name="tripType" value="multicity" /> Multi City</label>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label for="fromCity">Departure From</label>
+        <input type="text" id="fromCity" name="fromCity" value="New Delhi" aria-autocomplete="list" aria-controls="fromSuggest" aria-expanded="false" aria-haspopup="listbox" required />
+        <div class="suggestions" id="fromSuggest" role="listbox" aria-label="From city suggestions" hidden></div>
+      </div>
+      <span class="swap-btn" role="button" aria-label="Swap cities" tabindex="0">⇄</span>
+      <div class="field">
+        <label for="toCity">Going To</label>
+        <input type="text" id="toCity" name="toCity" value="Mumbai" aria-autocomplete="list" aria-controls="toSuggest" aria-expanded="false" aria-haspopup="listbox" required />
+        <div class="suggestions" id="toSuggest" role="listbox" aria-label="To city suggestions" hidden></div>
+      </div>
+      <div class="field datefield">
+        <label for="departDate">Departure Date</label>
+        <input type="date" id="departDate" name="departDate" value="2025-09-20" required />
+      </div>
+      <div class="field datefield" id="returnField" style="display:none;">
+        <label for="returnDate">Return Date</label>
+        <input type="date" id="returnDate" name="returnDate" />
+      </div>
+      <div class="field traveller-field">
+        <label for="travellers">Travellers & Class</label>
+        <select id="travellers" name="travellers" aria-label="Number of travellers">
+          <option>1 Traveller</option>
+          <option>2 Travellers</option>
+          <option>3 Travellers</option>
+        </select>
+        <select id="classType" name="classType" aria-label="Class type">
+          <option>Economy</option>
+          <option>Premium Economy</option>
+          <option>Business</option>
+        </select>
+      </div>
+    </div>
+    <div class="options-row">
+      <label><input type="radio" name="fareType" checked /> Regular Regular Fares</label>
+      <label><input type="radio" name="fareType" /> Student Extra Baggage</label>
+      <label><input type="radio" name="fareType" /> Armed Forces Extra Discount</label>
+      <label><input type="radio" name="fareType" /> Senior Citizen Extra Discount</label>
+      <label><input type="checkbox" id="nonStop" /> Non-Stop Flights</label>
+    </div>
+    <button type="submit" class="search-btn">Search</button>
+  </form>
+  <div id="bookingResult" role="region" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- flight ticket Specail offer -->
+  <div class="offers-section" id="Luxury">
+  <div class="offers-title">Special Offers</div>
+  <div class="slider-row">
+    <div class="carousel-controls">
+      <button class="slider-btn" id="prevBtn">&#8592;</button>
+      <button class="slider-btn" id="nextBtn">&#8594;</button>
+    </div>
+    <div id="sliderTrack" class="slider-track"></div>
+  </div>
+  <div class="offers-view">
+    <a href="#">View all offers &rarr;</a>
+  </div>
+</div>
+  <!-- Luxury trains view's -->
+     <div class="luxury-header">
+    Experience <span class="special">Luxury Trains</span> in India
+  </div>
+  <div class="luxury-carousel">
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn">&#8592;</button>
+      <button class="carousel-btn" id="nextBtn">&#8594;</button>
+    </div>
+    <div id="trainTrack" class="train-track"></div>
+  </div>
+  <!-- feature and feed back -->
+  <div class="service-title">DarShana Other Services</div>
+  <div class="service-cards">
+    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&q=80&w=450');">
+      <div class="card-content">
+        <div class="card-label">Adventure</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&q=80&w=450');">
+      <div class="card-content">
+        <div class="card-label">MICE</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&q=80&w=600');">
+      <div class="card-content">
+        <div class="card-label">Cruise</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1529148482759-b35b25c38739?auto=format&q=80&w=450');">
+      <div class="card-content">
+        <div class="card-label">Villas & Stays</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+    <div class="card" style="background-image:url('https://images.luxurytrainsofindia.in/wp-content/uploads/2018/08/golden-chariot-train-exterior.jpg');">
+      <div class="card-content">
+        <div class="card-label">Luxury Trains</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&q=80&w=450');">
+      <div class="card-content">
+        <div class="card-label">Monuments</div>
+        <div class="card-link">Plan my Trip &rarr;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-section">
+    <div class="feature-title">
+      Our <span class="highlight">Featured Program</span> of The Month
+    </div>
+    <div class="feature-row">
+      <div class="feature-card" style="background:#ffb82e;">
+      </div>
+      <div class="feature-card" style="background-image:url('https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&q=80&w=600');">
+      </div>
+      <div class="feature-card program-large" style="background-image:url('https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&q=80&w=900');">
+        <div class="feature-content">
+          <div class="feature-main">Explore KARNATAKA</div>
+          <div class="feature-desc">Bangalore - Coorg - Kabini - Mysore - Hospet - Badami - Goa</div>
+          <div class="feature-extra">Duration: 13 Days and 12 Nights</div>
+        </div>
+      </div>
+    </div>
+</div>
+    <div class="pay-section">
+    <div class="pay-title">Security & Payments</div>
+    <div class="pay-icons">
+      <img src="https://cdn-icons-png.flaticon.com/128/911/911257.png" alt="PCI DSS" />
+      <img src="https://cdn-icons-png.flaticon.com/128/243/243128.png" alt="Verified" />
+      <img src="https://cdn-icons-png.flaticon.com/128/784/784970.png" alt="Net Banking" />
+      <img src="https://cdn-icons-png.flaticon.com/128/7837/7837053.png" alt="EMI" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mastercard-logo.png" alt="Mastercard" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/RuPay_Logo.png" alt="RuPay" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Diners_Club_Logo.svg/1280px-Diners_Club_Logo.svg.png" alt="Diners Club" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" />
+    </div>
+  </div>
+  <br><br><br><br>
+  <!-- last slide footer -->
+    <div class="hero-gradient">
+    <div class="hero-content">
+      <h2>Discover the Future of Travel with DarShana</h2>
+    <p>
+    DarShana combines AI intelligence with sustainable travel insights to craft journeys that are not only memorable but also responsible. Join a growing community transforming exploration into mindful experiences.
+    </p>
+      <div class="hero-action">
+        <input type="text" placeholder="Enter destination..." class="hero-input" id="planInput" />
+        <button class="hero-btn" onclick="planTrip()">&#128197; Plan Your Trip</button>
+      </div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-val">50K+</div>
+      <div class="stat-label">Happy Travelers</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val green">15M+</div>
+      <div class="stat-label">kg CO<sub>2</sub> Saved</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val">200+</div>
+      <div class="stat-label">Destinations Covered</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val yellow">95%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-cols">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://i.pinimg.com/736x/50/24/fe/5024fe60fec060d0f3feb868875ed0a0.jpg" style="height:50px; width: 80px; border-radius: 20px;" alt="Indian">
+          <span class="highlight" style="color: orange;">Dar<span style="color:white;">Sh<span style="color:green;">ana</span>
+        </div>
+        <div class="footer-desc">
+          Revolutionizing travel with AI-powered personalization, sustainability, and safety features.
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-title">Features</div>
+          <a href="#">Mood Analyzer</a>
+          <a href="#">Festival Discovery</a>
+          <a href="#">Sustainable Travel</a>
+          <a href="#">AI Assistant</a>
+        </div>
+        <div class="footer-group">
+          <div class="footer-title">Support</div>
+          <a href="#">Help Center</a>
+          <a href="#">Safety Guidelines</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Emergency</a>
+        </div>
+        <div class="footer-group">
+          <div class="footer-title">Connect</div>
+          <div class="footer-socials">
+            <a href="#" title="Twitter">&#128081;</a>
+            <a href="#" title="Facebook">&#128100;</a>
+            <a href="#" title="Instagram">&#128247;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-base" style="  background: linear-gradient(90deg, orange 30%, white 40%, green 45%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;">
+      © 2025 DarShana. All rights reserved.
+      <span class="footer-legal">
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | Made with Readdy
+      </span>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+  <script>// Flight offers data array with images
+const flightOffers = [
+  { 
+    title: "Mumbai to Delhi - 25% Off", 
+    details: "Book before Sep 30!",
+    image: "https://www.yatra.com/ythomepagecms/media/todayspick/2025/Jul/17de39dc1751e46e6b5e616b1b06fdaf.jpg"
+  },
+  { 
+    title: "Bangalore to Goa - Flat ₹1000 Off", 
+    details: "Weekend discount!",
+    image: "https://cdn.grabon.in/gograbon/images/web-images/uploads/1753449562595/Air-india-coupons.jpg"
+  },
+  { 
+    title: "Chennai to Kolkata - Save 15%", 
+    details: "Limited seats!",
+    image: "https://www.icicibank.com/content/dam/icicibank/india/managed-assets/images/offer-zone/malaysia-airlines-banner.webp"
+  },
+  { 
+    title: "Hyderabad to Jaipur - ₹500 Off", 
+    details: "Special Dussehra Offer!",
+    image: "https://www.yatra.com/ythomepagecms/media/todayspick_home/2025/Jul/88407860a64b7037bcaeeb62e985b827.jpg"
+  }
+];
+
+// Get reference to slider track container
+const sliderTrack = document.getElementById('sliderTrack');
+let currentIndex = 0;
+
+// Function to render current offer with image
+function renderOffer(index) {
+  sliderTrack.innerHTML = `
+    <div class="offer-card">
+      <img src="${flightOffers[index].image}" alt="${flightOffers[index].title}" class="offer-image" />
+      <div class="offer-text">
+        <div class="offer-title">${flightOffers[index].title}</div>
+        <div class="offer-details">${flightOffers[index].details}</div>
+      </div>
+    </div>
+  `;
+}
+
+// Initial rendering of the first offer
+renderOffer(currentIndex);
+
+// Previous button click - show previous offer
+document.getElementById('prevBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + flightOffers.length) % flightOffers.length;
+  renderOffer(currentIndex);
+});
+
+// Next button click - show next offer
+document.getElementById('nextBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % flightOffers.length;
+  renderOffer(currentIndex);
+});
+
+// DarShana logo Animation Function
+    setTimeout(function(){
+      document.getElementById('logo-container').style.opacity = "0";
+    }, 4600); // Animation duration before homepage reveal
+</script>
+<script src="scripts.js"></script>
+</body>
+</html>
