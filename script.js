@@ -16,10 +16,73 @@ const moods = [
   {emoji:"🎉", label:"Celebratory & Social"}
 ];
 
+// Dynamic destination pool mapped to moods & preferences
+const destinationPool = [
+  {
+    title: "Rishikesh, Uttarakhand",
+    label: "Spiritual",
+    moods: [1, 4], // Calm, Reflective
+    img: "https://t4.ftcdn.net/jpg/03/01/35/03/360_F_301350326_5gAQhd0fH2faDncnsGBJqCxroCUCsQVn.jpg",
+    tags: ["Yoga", "River Rafting", "Temple Visits"],
+    energy: [4,10], social: [1,7], adventure: [2,8]
+  },
+  {
+    title: "Goa Beaches",
+    label: "Relaxation",
+    moods: [0, 5], // Happy, Social
+    img: "https://t3.ftcdn.net/jpg/02/43/24/76/360_F_243247620_Clg6rXsX4K0lhPWip3oo9Oee28J30L23.jpg",
+    tags: ["Beach", "Water Sports", "Nightlife"],
+    energy: [5,10], social: [4,10], adventure: [1,7]
+  },
+  {
+    title: "Ladakh, J&K",
+    label: "Adventure",
+    moods: [2, 3], // Curious, Energetic
+    img: "https://media.istockphoto.com/id/1391003874/photo/scenic-landscape-view-of-himalaya-mountain.jpg?s=612x612&w=0&k=20&c=IoGJQ3NPucbZqmKaej7fgB7iYkmEnhsDhPZySsU3agw=",
+    tags: ["Trekking", "Motorcycle Tours", "Camping"],
+    energy: [7,10], social: [3,8], adventure: [8,10]
+  },
+  {
+    title: "Varanasi, UP",
+    label: "Culture",
+    moods: [1, 4], // Calm, Reflective
+    img: "https://media.istockphoto.com/id/537988165/photo/varanasi.jpg?s=612x612&w=0&k=20&c=fFpEL17MiQJx5NkkNIVrTsesd2E8b04SCgzjfhUmQ7g=",
+    tags: ["Ganga Aarti", "Temples", "Ghats"],
+    energy: [1,6], social: [2,8], adventure: [1,4]
+  },
+  {
+    title: "Jaipur, Rajasthan",
+    label: "Heritage",
+    moods: [0,2], // Happy, Curious
+    img: "https://e1.pxfuel.com/desktop-wallpaper/649/470/desktop-wallpaper-rajasthan-culture-rajasthan.jpg",
+    tags: ["Palaces", "Forts", "Food"],
+    energy: [5,10], social: [1,10], adventure: [3,8]
+  },
+  {
+    title: "Kerala Backwaters",
+    label: "Nature",
+    moods: [1, 4], // Calm, Reflective
+    img: "https://t3.ftcdn.net/jpg/12/61/62/58/360_F_1261625896_moxQeeYntW01yx5WtChl5kNRrRnn6Hmg.jpg",
+    tags: ["Houseboat", "Ayurveda", "Lakes"],
+    energy: [1,5], social: [1,7], adventure: [1,5]
+  },
+  {
+    title: "Mumbai",
+    label: "Urban Life",
+    moods: [0, 5], // Happy, Social
+    img: "https://t4.ftcdn.net/jpg/01/46/43/87/360_F_146438747_3XYwVkfnYZuukBZYmDM8xeoqENzyhAqa.jpg",
+    tags: ["Nightlife", "Bollywood", "Street Food"],
+    energy: [5,10], social: [5,10], adventure: [1,6]
+  },
+  // Add more destinations similarly
+];
+
 function renderStep() {
-  // Indicator dots
-  [...stepIndicator].forEach((dot, idx) => dot.className = 'dot' + (idx === step ? ' active' : ''));
-  // Main display
+  // Update indicator dots
+  if (stepIndicator) {
+    [...stepIndicator].forEach((dot, idx) => dot.className = 'dot' + (idx === step ? ' active' : ''));
+  }
+  // Steps logic
   if(step === 0){
     stepsDiv.innerHTML = `
       <h1>AI Mood Analyzer</h1>
@@ -35,7 +98,7 @@ function renderStep() {
       </div>
       <div class="btn-row">
         <button class="btn-outline" disabled>Previous</button>
-        <button class="btn"${moodSelected===null?' disabled':''} onclick="nextStep()">Next</button>
+        <button class="btn-outline"${moodSelected===null?' disabled':''} onclick="nextStep()">Next</button>
       </div>
     `;
   }
@@ -44,7 +107,6 @@ function renderStep() {
     stepsDiv.innerHTML = `
       <h1>AI Mood Analyzer</h1>
       <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
-      <div class="step-indicator"></div>
       <div class="slider-section">
         <div class="slider-title">What's your energy level?</div>
         <div class="emoji-large">😊</div>
@@ -58,13 +120,15 @@ function renderStep() {
       </div>
       <div class="btn-row">
         <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn" onclick="nextStep()">Next</button>
+        <button class="btn-outline" onclick="nextStep()">Next</button>
       </div>
     `;
-    document.getElementById('energy-slider').addEventListener("input", e=>{
-      energyLevel = parseInt(e.target.value);
-      renderStep();
-    });
+    setTimeout(()=>{
+      document.getElementById('energy-slider').addEventListener("input", e=>{
+        energyLevel = parseInt(e.target.value);
+        renderStep();
+      });
+    }, 0);
   }
   else if(step === 2){
     let levelText = socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Groups" : "Groups");
@@ -84,16 +148,17 @@ function renderStep() {
       </div>
       <div class="btn-row">
         <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn" onclick="nextStep()">Next</button>
+        <button class="btn-outline" onclick="nextStep()">Next</button>
       </div>
     `;
-    document.getElementById('social-slider').addEventListener("input", e=>{
-      socialLevel = parseInt(e.target.value);
-      renderStep();
-    });
+    setTimeout(()=>{
+      document.getElementById('social-slider').addEventListener("input", e=>{
+        socialLevel = parseInt(e.target.value);
+        renderStep();
+      });
+    }, 0);
   }
   else if(step === 3){
-    // Adventure slider
     let text = adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild Adventure" : "Adventurous");
     stepsDiv.innerHTML = `
       <h1>AI Mood Analyzer</h1>
@@ -111,13 +176,15 @@ function renderStep() {
       </div>
       <div class="btn-row">
         <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn" onclick="showRecommendations()">Analyze My Mood</button>
+        <button class="btn-outline" onclick="showRecommendations()">Analyze My Mood</button>
       </div>
     `;
-    document.getElementById('adventure-slider').addEventListener("input", e=>{
-      adventureLevel = parseInt(e.target.value);
-      renderStep();
-    });
+    setTimeout(()=>{
+      document.getElementById('adventure-slider').addEventListener("input", e=>{
+        adventureLevel = parseInt(e.target.value);
+        renderStep();
+      });
+    }, 0);
   }
 }
 
@@ -136,52 +203,59 @@ window.prevStep = function(){
   renderStep();
 }
 
+// Filter destinations dynamically based on all params
+function getPersonalizedDestinations() {
+  // Generate preference ranges
+  let mood = moodSelected;
+  let energy = energyLevel;
+  let social = socialLevel;
+  let adventure = adventureLevel;
+  // Filter destinations by checking if user score is within pool range
+  let results = destinationPool.filter(place => {
+    let moodMatch = place.moods.includes(mood);
+    let energyMatch = (energy >= place.energy[0] && energy <= place.energy[1]);
+    let socialMatch = (social >= place.social[0] && social <= place.social[1]);
+    let adventureMatch = (adventure >= place.adventure[0] && adventure <= place.adventure[1]);
+    return moodMatch && energyMatch && socialMatch && adventureMatch;
+  });
+  // Fallback: If less than 3 found, pick top-3 by mood priority
+  if (results.length === 0){
+    results = destinationPool.filter(place=>place.moods.includes(mood)).slice(0,3);
+  }
+  // Final fallback: show any 3 distinct
+  if(results.length === 0){
+    results = destinationPool.slice(0,3);
+  }
+  // Randomize and pick up to 3
+  results = results.sort(()=>Math.random()-0.5).slice(0,3);
+  return results;
+}
+
 window.showRecommendations = function(){
-  [...stepIndicator].forEach((dot)=>dot.className='dot');
+  if (stepIndicator) {
+    [...stepIndicator].forEach((dot)=>dot.className='dot');
+  }
+  let recommendations = getPersonalizedDestinations();
   stepsDiv.innerHTML = `
     <h1>Your Personalized Recommendations</h1>
     <div class="subtitle">Based on your current mood and preferences</div>
     <div class="card-recommend">
-      <div class="recommend-card">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="">
-        <div class="rc-info">
-          <div class="rc-title">Rishikesh, Uttarakhand</div>
-          <div class="rc-label">Spiritual</div>
-          <div class="rc-tags">
-            <span class="rc-tag">Yoga</span>
-            <span class="rc-tag">River Rafting</span>
-            <span class="rc-tag">Temple Visits</span>
+      ${recommendations.map(dest => `
+        <div class="recommend-card">
+          <img src="${dest.img}" alt="">
+          <div class="rc-info">
+            <div class="rc-title">${dest.title}</div>
+            <div class="rc-label">${dest.label}</div>
+            <div class="rc-tags">
+              ${dest.tags.map(tag=>`<span class="rc-tag">${tag}</span>`).join('')}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="recommend-card">
-        <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308" alt="">
-        <div class="rc-info">
-          <div class="rc-title">Goa Beaches</div>
-          <div class="rc-label">Relaxation</div>
-          <div class="rc-tags">
-            <span class="rc-tag">Beach Activities</span>
-            <span class="rc-tag">Water Sports</span>
-            <span class="rc-tag">Nightlife</span>
-          </div>
-        </div>
-      </div>
-      <div class="recommend-card">
-        <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b" alt="">
-        <div class="rc-info">
-          <div class="rc-title">Ladakh, Jammu & Kashmir</div>
-          <div class="rc-label">Adventure</div>
-          <div class="rc-tags">
-            <span class="rc-tag">Trekking</span>
-            <span class="rc-tag">Motorcycle Tours</span>
-            <span class="rc-tag">Camping</span>
-          </div>
-        </div>
-      </div>
+      `).join('')}
     </div>
     <div class="btn-row">
-      <button class="btn" onclick="restartMood()">Analyze Again</button>
-      <button class="btn" onclick="payForTrip()">Pay & Select Date</button>
+      <button class="btn-outline" onclick="restartMood()">Analyze Again</button>
+      <button class="btn-outline" onclick="payForTrip()">Pay & Select Date</button>
     </div>
   `;
 }
@@ -195,11 +269,202 @@ window.restartMood = function(){
   renderStep();
 }
 
-window.payForTrip = function(){
-  alert("Redirecting to payment & date selection...");
-}
+// window.payForTrip = function(){
+//   alert("Redirecting to payment & date selection...");
+// }
 
 renderStep();
+
+// Click to Pay& select Date , After select trip to plan by Mood analysis...
+
+// ---------- Add after your showRecommendations() ----------
+
+// State for selected destination, user info, and trip date
+let selectedPlaceIdx = null;
+
+// Enhanced: allow click-to-select a single place!
+window.showRecommendations = function() {
+  if (stepIndicator) {
+    [...stepIndicator].forEach((dot) => dot.className = 'dot');
+  }
+  let recommendations = getPersonalizedDestinations();
+  selectedPlaceIdx = null;
+  stepsDiv.innerHTML = `
+    <h1>Your Personalized Recommendations</h1>
+    <div class="subtitle">Based on your current mood and preferences</div>
+    <div class="card-recommend">
+      ${recommendations.map((dest, idx) => `
+        <div class="recommend-card${selectedPlaceIdx===idx?' selected':''}" 
+             onclick="selectPlaceToBook(${idx}, this)">
+          <img src="${dest.img}" alt="">
+          <div class="rc-info">
+            <div class="rc-title">${dest.title}</div>
+            <div class="rc-label">${dest.label}</div>
+            <div class="rc-tags">
+              ${dest.tags.map(tag=>`<span class="rc-tag">${tag}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="btn-row">
+      <button class="btn-outline" onclick="restartMood()">Analyze Again</button>
+      <button class="btn-outline" id="paySelectBtn" onclick="payForTrip()" disabled>Pay & Select Date</button>
+    </div>
+    <style>.recommend-card.selected{border:2px solid #3366ff;box-shadow:0 2px 8px #3366ff33;}</style>
+  `;
+};
+
+window.selectPlaceToBook = function(idx, el) {
+  selectedPlaceIdx = idx;
+  // visually update selection
+  [...document.querySelectorAll('.recommend-card')].forEach(card => card.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('paySelectBtn').disabled = false;
+};
+
+// Pay & Select Date Page
+window.payForTrip = function() {
+  let recommendations = getPersonalizedDestinations();
+  if (selectedPlaceIdx === null) return;
+  const dest = recommendations[selectedPlaceIdx];
+  // Simple dynamic price
+  let amount = 5000 + (energyLevel * 120) + (adventureLevel * 180) + (socialLevel * 100);
+  stepsDiv.innerHTML = `
+    <h1>Trip Booking Details</h1>
+    <form id="tripForm" onsubmit="event.preventDefault(); showTicket(${amount});">
+      <div class="trip-summary">
+        <img src="${dest.img}" style="width:120px;float:right;margin-left:1em;">
+        <b>Destination: </b>${dest.title}<br>
+        <b>Mood: </b>${moods[moodSelected].label}<br>
+        <b>Energy: </b>${energyLevel}/10<br>
+        <b>Social: </b>${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)<br>
+        <b>Adventure: </b>${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)<br>
+      </div>
+      <fieldset style="margin-top:2em;">
+        <legend>User Details</legend>
+        <label>Name: <input name="uname" type="text" required></label><br><br>
+        <label>Age: <input name="uage" type="number" min="1" max="120" required></label><br><br>
+        <label>DOB: <input name="udob" type="date" required></label><br><br>
+        <label>Address: <input name="uaddress" type="text" required></label><br><br>
+      </fieldset>
+      <div style="margin-top:1em;">
+        <label><b>Trip Date:</b> <input name="tripdate" type="date" min="${getToday()}" required></label>
+      </div>
+      <div style="margin:1.5em 0;font-size:1.2em;">
+        <b>Trip Price:</b> ₹${amount}
+      </div>
+      <button type="submit" class="btn-outline" style="margin-right:1em;">Pay & Confirm</button>
+      <button type="button" class="btn-outline" onclick="restartMood()">Cancel</button>
+    </form>
+    <style>
+      .trip-summary{background:#eef3f9;padding:1em;border-radius:7px;margin:1em 0;}
+      fieldset{border-radius:5px;border:1px solid #c4d7e9;}
+      legend{font-weight:bold;}
+      label{display:block; margin-bottom:0.5em;}
+    </style>
+  `;
+};
+
+function getToday(){
+  let today = new Date();
+  let m = String(today.getMonth()+1).padStart(2,'0');
+  let d = String(today.getDate()).padStart(2,'0');
+  return `${today.getFullYear()}-${m}-${d}`;
+}
+
+// Show "ticket slip" after payment confirmation
+window.showTicket = function(amount) {
+  let f = document.getElementById('tripForm');
+  let name = f.uname.value;
+  let age = f.uage.value;
+  let dob = f.udob.value;
+  let address = f.uaddress.value;
+  let tripdate = f.tripdate.value;
+
+  let recommendations = getPersonalizedDestinations();
+  const dest = recommendations[selectedPlaceIdx];
+
+  stepsDiv.innerHTML = `
+    <div style="max-width:375px;margin:2em auto;padding:2em 2.2em 1.6em;border-radius:16px;background:#f6f7fb;box-shadow:0 4px 16px #0053af12;color:#212d49;">
+      <div style="text-align:center;margin-bottom:0.9em;">
+        <img src="${dest.img}" style="width:85px;border-radius:7px;border:2px solid #1947b5;">
+        <h2 style="margin:0.8em 0 0.1em;font-size:1.5em;">DarShana AI Trip Ticket</h2>
+        <small style="color:#777;">Your Mood-Powered Experience</small>
+      </div>
+      <div style="margin:1em 0 1.2em;line-height:1.5;">
+        <b>Name:</b> ${name}<br>
+        <b>Age:</b> ${age} <br>
+        <b>DOB:</b> ${dob}<br>
+        <b>Address:</b> ${address}<br>
+        <b>Date of Trip:</b> ${tripdate}
+      </div>
+      <div style="background:#dde6f9;padding:10px 12px 8px;border-radius:7px;">
+        <b>Destination:</b> ${dest.title} <br>
+        <b>Mood:</b> ${moods[moodSelected].label}<br>
+        <b>Energy:</b> ${energyLevel}/10 &nbsp;
+        <b>Social:</b> ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10) <br>
+        <b>Adventure:</b> ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10) <br>
+      </div>
+      <div style="margin:1em 0;font-size:1.2em;">
+        <b>Amount Paid: ₹${amount}</b>
+      </div>
+      <div style="text-align:center;margin-bottom:1em;">
+        <span style="font-size:1.35em;color:#009944;"><b>Booking Confirmed</b></span><br>
+        <span style="font-size:1em;color:#2a67f5;">Enjoy your AI-powered journey!</span>
+      </div>
+      <button class="btn-outline" style="display:block;margin:10px auto 0;" onclick="restartMood()">Plan Another Trip</button>
+      <button class="btn-outline" style="display:block;margin:16px auto 0;" onclick="downloadTicketPDF()">Download PDF Slip</button>
+    </div>
+  `;
+};
+
+// geerate a trip ticket pdf
+window.downloadTicketPDF = function() {
+  // Use your global state or last booking info
+  let recommendations = getPersonalizedDestinations();
+  const dest = recommendations[selectedPlaceIdx];
+  let amount = document.querySelector("div[style*='font-size:1.2em;'] b").textContent.match(/\d+/)[0];
+
+  // You can store name, age etc. as global vars when confirming the booking
+  // For a simple approach, you can capture via prompt or cache those values
+  // If you defined those details globally in showTicket, just reuse them here!
+  // If not, you can add those variables to window, e.g., window.lastBookingName, etc.
+
+  // For now, ask for details if needed (or expand as you wish)
+  let name = prompt("Enter Name (for PDF):", "");
+  let age = prompt("Enter Age (for PDF):", "");
+  let dob = prompt("Enter DOB (YYYY-MM-DD):", "");
+  let address = prompt("Enter Address:", "");
+  let tripdate = prompt("Enter Trip Date (YYYY-MM-DD):", "");
+
+  const { jsPDF } = window.jspdf;
+  let doc = new jsPDF();
+  let y = 20;
+
+  doc.setFontSize(16);
+  doc.text('DarShana AI Trip Ticket', 20, y); y+=11;
+  doc.setFontSize(10);
+  doc.text('Your Mood-Powered Experience', 20, y); y+=12;
+  doc.setFontSize(12);
+  doc.text(`Name: ${name}`, 20, y); y+=7;
+  doc.text(`Age: ${age}`, 20, y); y+=7;
+  doc.text(`DOB: ${dob}`, 20, y); y+=7;
+  doc.text(`Address: ${address}`, 20, y); y+=7;
+  doc.text(`Trip Date: ${tripdate}`, 20, y); y+=8;
+  doc.text(`Destination: ${dest.title}`, 20, y); y+=7;
+  doc.text(`Mood: ${moods[moodSelected].label}`, 20, y); y+=7;
+  doc.text(`Energy: ${energyLevel}/10`, 20, y); y+=7;
+  doc.text(`Social: ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)`, 20, y); y+=7;
+  doc.text(`Adventure: ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)`, 20, y); y+=8;
+  doc.setFontSize(13);
+  doc.text(`Amount Paid: ₹${amount}`, 20, y); y+=9;
+  doc.setFontSize(11);
+  doc.text('Booking Confirmed | Enjoy your AI-powered journey!', 20, y);
+
+  doc.save('Darshana_Trip_Ticket.pdf');
+};
+
 
 // Cultural recommandation of enevt and fastivals
 const festivals = [
@@ -417,259 +682,218 @@ window.sendEmergency = function(type) {
   }
 };
 
-  const cities = [
-    "New Delhi",
-    "Mumbai",
-    "Bangalore",
-    "Chennai",
-    "Kolkata",
-    "Hyderabad",
-    "Pune",
-    "Ahmedabad",
-    "Jaipur",
-    "Lucknow",
-    "Goa",
-    "Chandigarh",
-    "Ranchi",
-    "Guwahati",
-    "Varanasi",
-    "Surat"
-  ];
-
-  const fromInput = document.getElementById('fromCity');
-  const toInput = document.getElementById('toCity');
-  const fromSuggest = document.getElementById('fromSuggest');
-  const toSuggest = document.getElementById('toSuggest');
-
-  function filterCities(inputVal) {
-    return cities.filter(city => city.toLowerCase().startsWith(inputVal.toLowerCase()));
-  }
-
-  function showSuggestions(inputElem, suggestElem) {
-    let val = inputElem.value.trim();
-    if (!val) {
-      suggestElem.innerHTML = "";
-      suggestElem.hidden = true;
-      inputElem.setAttribute('aria-expanded', 'false');
-      return;
-    }
-    let filtered = filterCities(val);
-    if (filtered.length === 0) {
-      suggestElem.innerHTML = "<div class='suggestion-item'>No results found</div>";
-      suggestElem.hidden = false;
-      inputElem.setAttribute('aria-expanded', 'true');
-      return;
-    }
-    suggestElem.innerHTML = filtered.map(city =>
-      `<div class="suggestion-item" role="option" tabindex="0">${city}</div>`
-    ).join('');
-    suggestElem.hidden = false;
-    inputElem.setAttribute('aria-expanded', 'true');
-  }
-
-  function selectSuggestion(e, inputElem, suggestElem) {
-    if (e.target.classList.contains('suggestion-item')) {
-      inputElem.value = e.target.textContent;
-      suggestElem.innerHTML = "";
-      suggestElem.hidden = true;
-      inputElem.setAttribute('aria-expanded', 'false');
-      inputElem.focus();
-    }
-  }
-
-  fromInput.addEventListener('input', () => showSuggestions(fromInput, fromSuggest));
-  toInput.addEventListener('input', () => showSuggestions(toInput, toSuggest));
-
-  fromSuggest.addEventListener('click', e => selectSuggestion(e, fromInput, fromSuggest));
-  toSuggest.addEventListener('click', e => selectSuggestion(e, toInput, toSuggest));
-
-  // Keyboard accessibility for suggestions
-  function keyboardNav(inputElem, suggestElem, e) {
-    let active = suggestElem.querySelector('.suggestion-item[tabindex="0"]');
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (!active) {
-        let first = suggestElem.querySelector('.suggestion-item');
-        if (first) first.setAttribute('tabindex', '0');
-      } else {
-        active.removeAttribute('tabindex');
-        let next = active.nextElementSibling || suggestElem.querySelector('.suggestion-item');
-        next.setAttribute('tabindex', '0');
-        next.focus();
-      }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (!active) {
-        let last = suggestElem.querySelector('.suggestion-item:last-child');
-        if (last) last.setAttribute('tabindex', '0');
-      } else {
-        active.removeAttribute('tabindex');
-        let prev = active.previousElementSibling || suggestElem.querySelector('.suggestion-item:last-child');
-        prev.setAttribute('tabindex', '0');
-        prev.focus();
-      }
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (active) {
-        inputElem.value = active.textContent;
-        suggestElem.innerHTML = "";
-        suggestElem.hidden = true;
-        inputElem.setAttribute('aria-expanded', 'false');
-        inputElem.focus();
-      }
-    } else if (e.key === 'Escape') {
-      suggestElem.innerHTML = "";
-      suggestElem.hidden = true;
-      inputElem.setAttribute('aria-expanded', 'false');
-    }
-  }
-
-  fromInput.addEventListener('keydown', e => keyboardNav(fromInput, fromSuggest, e));
-  toInput.addEventListener('keydown', e => keyboardNav(toInput, toSuggest, e));
-
-  // Swap cities
-  function swapCities() {
-    let fromVal = fromInput.value;
-    fromInput.value = toInput.value;
-    toInput.value = fromVal;
-    fromInput.focus();
-  }
-  document.querySelector('.swap-btn').addEventListener('click', swapCities);
-
-  // Show/hide return date field on trip type
-  document.querySelectorAll('input[name="tripType"]').forEach(radio => {
-    radio.addEventListener('change', function () {
-      document.getElementById('returnField').style.display = this.value === 'roundtrip' ? 'block' : 'none';
-    });
-  });
-
-  // Tab UI activate
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function () {
-      document.querySelectorAll('.tab').forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-        t.setAttribute('tabindex', '-1');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      tab.setAttribute('tabindex', '0');
-    });
-  });
-
-  // Form submit handler
-  document.getElementById('bookingForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    let fromCity = fromInput.value;
-    let toCity = toInput.value;
-    let departDate = document.getElementById('departDate').value;
-    let returnDate = document.getElementById('returnDate').value;
-    let tripType = document.querySelector('input[name="tripType"]:checked').value;
-    let travellers = document.getElementById('travellers').value;
-    let classType = document.getElementById('classType').value;
-    let nonStop = document.getElementById('nonStop').checked;
-
-    // Simple validation
-    if(!fromCity || !toCity || !departDate) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-    if(tripType === 'roundtrip' && !returnDate) {
-      alert('Please select return date for round trip.');
-      return;
-    }
-
-    // Show booking summary
-    const bookingResult = document.getElementById('bookingResult');
-    bookingResult.innerHTML = `<h3>Flight Booking Summary</h3>
-      <p><strong>From:</strong> ${fromCity}</p>
-      <p><strong>To:</strong> ${toCity}</p>
-      <p><strong>Departure Date:</strong> ${departDate}</p>
-      ${tripType === 'roundtrip' ? `<p><strong>Return Date:</strong> ${returnDate}</p>` : ''}
-      <p><strong>Trip Type:</strong> ${tripType.charAt(0).toUpperCase() + tripType.slice(1)}</p>
-      <p><strong>Travellers & Class:</strong> ${travellers}, ${classType}</p>
-      <p><strong>Non-Stop Flights:</strong> ${nonStop ? 'Yes' : 'No'}</p>
-      <button onclick="payNow()" style="background:#e45043;color:#fff;padding:12px 30px;border:none;border-radius:8px;cursor:pointer;font-size:1em;margin-top:10px;">Proceed to Payment</button>`;
-  });
-
-  function payNow() {
-    alert('Proceeding to payment gateway...');
-  }
 
    // Add your luxury train details below:
-    const trains = [
-      {
-        name: "Deccan Odyssey",
-        img: "https://deccan-odyssey.in/wp-content/uploads/2024/12/train-deccan-odyssey18.jpg"
-      },
-      {
-        name: "The Golden Chariot",
-        img: "https://www.tripsavvy.com/thmb/1ohjZcqgoCy1MU0aTeLSMa2V6_Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/golden-chariot-train-lg1-5a0303edda271500373e6ead.jpg"
-      },
-      {
-        name: "Palace on Wheels",
-        img: "https://preview.redd.it/indian-railways-palace-on-wheels-v0-96wnngxu0ssa1.png?width=602&format=png&auto=webp&s=af5b96576808fee62ccb34311ebb1d747bf4e4a5"
-      },
-      {
-        name: "Maharajas' Express",
-        img: "https://www.peakadventuretour.com/assets/images/maharaja-express-train_banner.webp"
-      }
-    ];
+// script.js
+const trains = [
+  {
+    name: "Deccan Odyssey",
+    img: "https://deccan-odyssey.in/wp-content/uploads/2024/12/train-deccan-odyssey18.jpg",
+    link: "https://www.irctc.co.in/nget/train-search"
+  },
+  {
+    name: "The Golden Chariot",
+    img: "https://www.tripsavvy.com/thmb/1ohjZcqgoCy1MU0aTeLSMa2V6_Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/golden-chariot-train-lg1-5a0303edda271500373e6ead.jpg",
+    link: "https://www.goldenchariot.org/"
+  },
+  {
+    name: "Palace on Wheels",
+    img: "https://preview.redd.it/indian-railways-palace-on-wheels-v0-96wnngxu0ssa1.png?width=602&format=png&auto=webp&s=af5b96576808fee62ccb34311ebb1d747bf4e4a5",
+    link: "https://www.thepalaceonwheels.com/"
+  },
+  {
+    name: "Maharajas' Express",
+    img: "https://www.peakadventuretour.com/assets/images/maharaja-express-train_banner.webp",
+    link: "https://www.the-maharajas.com/"
+  },
+  {
+    name: "Royal Rajasthan on Wheels",
+    img: "https://www.luxurytrainsindia.org/images/royal-rajasthan-on-wheels-images/image-1.jpg",
+    link: "https://www.indianluxurytrains.com/royal-rajasthan-on-wheels/"
+  }
+];
 
-    const trainTrack = document.getElementById("trainTrack");
-    let current = 0;
+const trainTrack = document.getElementById("trainTrack");
+let current = 0;
+const cardWidth = 362; // card width + gap
 
-    function renderTrains() {
-      trainTrack.innerHTML = trains.map(train => `
-        <div class="train-card">
-          <img src="${train.img}" alt="${train.name}" class="train-img" />
-          <div class="train-name">${train.name}</div>
-        </div>
-      `).join('');
-      trainTrack.style.transform = `translateX(${-current*402}px)`;
+function renderTrains() {
+  trainTrack.innerHTML = trains
+    .map(
+      (train) => `
+    <div class="train-card" onclick="window.open('${train.link}', '_blank')">
+      <img src="${train.img}" alt="${train.name}" class="train-img" />
+      <div class="train-name">${train.name}</div>
+    </div>
+  `
+    )
+    .join("");
+  updateCarousel();
+}
+
+function updateCarousel() {
+  trainTrack.style.transform = `translateX(${-current * cardWidth}px)`;
+}
+
+document.getElementById("prevBtn").onclick = () => {
+  if (current > 0) current--;
+  updateCarousel();
+};
+
+document.getElementById("nextBtn").onclick = () => {
+  if (current < trains.length - 1) current++;
+  updateCarousel();
+};
+
+// Initial render
+renderTrains();
+
+  // Trip & Travel Registration POrtal Logic
+
+  const photoUploadInput = document.getElementById('photoUpload');
+  const photoPreview = document.getElementById('photoPreview');
+  const form = document.getElementById('tripRegistrationForm');
+  const registrationMessage = document.getElementById('registrationMessage');
+  const slipContainer = document.getElementById('slipContainer');
+
+  // Slip Elements
+  const slipPhoto = document.getElementById('slipPhoto');
+  const slipName = document.getElementById('slipName');
+  const slipEmail = document.getElementById('slipEmail');
+  const slipPhone = document.getElementById('slipPhone');
+  const slipState = document.getElementById('slipState');
+  const slipDestination = document.getElementById('slipDestination');
+  const slipTripDate = document.getElementById('slipTripDate');
+  const slipDuration = document.getElementById('slipDuration');
+  const slipPreferences = document.getElementById('slipPreferences');
+  const slipDrive = document.getElementById('slipDrive');
+  const payConfirmBtn = document.getElementById('payConfirmBtn');
+  const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+  const printMessage = document.getElementById('printMessage');
+
+  // Photo preview handler
+  photoUploadInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        photoPreview.src = e.target.result;
+        photoPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+    }
+  });
+
+  // Store photo base64 from preview for slip display and pdf
+  let userPhotoBase64 = '';
+
+  photoUploadInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        userPhotoBase64 = e.target.result;
+        photoPreview.src = userPhotoBase64;
+        photoPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      userPhotoBase64 = '';
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+    }
+  });
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    registrationMessage.textContent = '';
+    if (!form.checkValidity()) {
+      registrationMessage.style.color = '#dc2626';
+      registrationMessage.textContent = 'Please fill out all required fields correctly.';
+      form.reportValidity();
+      return;
+    }
+    registrationMessage.textContent = '';
+
+    // Collect form data
+    const formData = new FormData(form);
+
+    // Populate slip
+    slipName.textContent = formData.get('fullName');
+    slipEmail.textContent = formData.get('email');
+    slipPhone.textContent = formData.get('phone');
+    slipState.textContent = formData.get('state');
+    slipDestination.textContent = formData.get('destination');
+    slipTripDate.textContent = formData.get('tripDate');
+    slipDuration.textContent = formData.get('duration');
+    slipPreferences.textContent = formData.get('preferences') || 'None';
+    slipDrive.textContent = formData.get('selfDrive') ? 'Yes' : 'No';
+
+    if(userPhotoBase64){
+      slipPhoto.src = userPhotoBase64;
+      slipPhoto.style.display = 'block';
+    } else {
+      slipPhoto.style.display = 'none';
     }
 
-    document.getElementById("prevBtn").onclick = () => {
-      if(current > 0) current--;
-      renderTrains();
-    };
-    document.getElementById("nextBtn").onclick = () => {
-      if(current < trains.length-1) current++;
-      renderTrains();
-    };
+    // Hide form, Show slip
+    form.style.display = 'none';
+    slipContainer.style.display = 'block';
 
-    renderTrains();
+    // Reset pay & download UI
+    payConfirmBtn.style.display = 'inline-block';
+    downloadPDFBtn.style.display = 'none';
+    printMessage.textContent = '';
+    registrationMessage.textContent = '';
+  });
 
-    const registerBtn = document.getElementById('registerBtn');
-const registrationSection = document.getElementById('registrationSection');
-const registrationForm = document.getElementById('tripRegistrationForm');
-const registrationMessage = document.getElementById('registrationMessage');
+  // Payment confirmation click handler
+  payConfirmBtn.addEventListener('click', () => {
+    payConfirmBtn.style.display = 'none';
+    downloadPDFBtn.style.display = 'inline-block';
+    printMessage.textContent = 'Payment successful! You can now download your trip slip.';
+    printMessage.style.color = '#16a34a';
+  });
 
-registerBtn.addEventListener('click', () => {
-  const isVisible = registrationSection.style.display === 'block';
-  registrationSection.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible) {
-    registrationSection.scrollIntoView({ behavior: 'smooth' });
-  }
-});
+  // Download PDF slip button handler
+  downloadPDFBtn.addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-registrationForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+    doc.setFontSize(18);
+    doc.text('DarShana Trip Registration Slip', 14, 20);
+    doc.setFontSize(12);
 
-  // Simple form validation (already HTML5 validated, but can customize)
-  if (!registrationForm.checkValidity()) {
-    registrationMessage.textContent = "Please fill all required fields correctly.";
-    registrationMessage.style.color = 'red';
-    return;
-  }
-  
-  // Simulate form submission, e.g., send to server or show success
-  const formData = new FormData(registrationForm);
-  const name = formData.get('fullName');
-  
-  registrationMessage.textContent = `Thank you, ${name}! Your trip registration has been received. We will contact you shortly.`;
-  registrationMessage.style.color = 'green';
-  
-  registrationForm.reset();
-});
+    // Add photo if exists
+    if(userPhotoBase64){
+      const imgProps = doc.getImageProperties(userPhotoBase64);
+      const pdfWidth = 40;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(userPhotoBase64, 'JPEG', 150, 10, pdfWidth, pdfHeight);
+    }
+
+    // Text fields
+    let y = 40;
+    function addLine(label, value){
+      doc.text(`${label}: ${value}`, 14, y);
+      y += 8;
+    }
+    addLine('Name', slipName.textContent);
+    addLine('Email', slipEmail.textContent);
+    addLine('Phone', slipPhone.textContent);
+    addLine('State', slipState.textContent);
+    addLine('Destination', slipDestination.textContent);
+    addLine('Trip Date', slipTripDate.textContent);
+    addLine('Duration (days)', slipDuration.textContent);
+    addLine('Preferences', slipPreferences.textContent);
+    addLine('Driving Self', slipDrive.textContent);
+    addLine('Amount Paid', '₹10,000');
+
+    doc.setFontSize(14);
+    doc.text('Payment Confirmed - Enjoy your trip!', 14, y + 15);
+
+    doc.save('Darshana_Trip_Registration_Slip.pdf');
+  });
