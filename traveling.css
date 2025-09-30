@@ -1,104 +1,104 @@
-    .luxury-header {
-      text-align: left;
-      font-size: 2.18em;
-      margin-top: 32px;
-      margin-bottom: 24px;
-      margin-left: 26px;
-    }
-    .luxury-header .special {
-      color: #d4457b;
-      font-family: 'Brush Script MT', cursive;
-      font-size: 1.2em;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-    .luxury-carousel {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-      padding-bottom: 28px;
-    }
-    .train-track {
-      display: flex;
-      gap: 22px;
-      transition: transform 0.7s cubic-bezier(.75,.01,.45,.97);
-    }
-    .train-card {
-      background: #fff;
-      border-radius: 22px;
-      box-shadow: 0 2px 18px rgba(55,9,41,0.15);
-      flex: 0 0 380px;
-      position: relative;
-      overflow: hidden;
-      text-align: left;
-      min-height: 420px;
-      cursor: pointer;
-      transition: box-shadow 0.18s;
-    }
-    .train-card:hover {
-      box-shadow: 0 8px 36px #c857d4a0;
-    }
-    .train-img {
-      width: 100%;
-      height: 270px;
-      object-fit: cover;
-      display: block;
-      border-top-left-radius: 22px;
-      border-top-right-radius: 22px;
-    }
-    .train-name {
-      font-size: 1.27em;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(90deg,#333448b8,#b2388baf);
-      padding: 14px 15px 15px 25px;
-      border-bottom-right-radius: 22px;
-      border-bottom-left-radius: 22px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      letter-spacing: .5px;
-    }
-    .carousel-controls {
-      position: absolute;
-      top: 45%;
-      width: 100%;
-      left: 0;
-      display: flex;
-      justify-content: space-between;
-      pointer-events:none;
-    }
-    .carousel-btn {
-      pointer-events: auto;
-      background: #fff6fdcc;
-      border-radius: 50%;
-      border: none;
-      font-size: 2.3em;
-      color: #b2388b;
-      box-shadow: 0 2px 14px #b2388b55;
-      cursor: pointer;
-      width: 54px;
-      height: 54px;
-      margin: 0 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
-      z-index: 10;
-    }
-    .carousel-btn:active {
-      background: #fbd0ef;
-      color: #ed1f82;
-    }
-    @media (max-width:900px){
-      .luxury-carousel { max-width:98vw;}
-      .train-card { flex-basis: 86vw;}
-    }
-    @media (max-width:512px){
-      .luxury-header { font-size: 1.13em;}
-    }
+/* Luxury train style 
+/* style.css */
+:root {
+  --accent:#d4457b;
+  --bg:#faf6fb;
+  --card:#fff;
+  --shadow:0 8px 28px rgba(0,0,0,0.15);
+}
+.luxury-section {
+  max-width:1200px;
+  margin:40px auto;
+  padding:0 18px;
+}
+
+.luxury-header {
+  font-size:2rem;
+  margin-bottom:24px;
+}
+.luxury-header .special {
+  color: var(--accent);
+  font-family:'Brush Script MT',cursive;
+  font-size:1.25em;
+}
+
+.luxury-carousel {
+  position:relative;
+  overflow:hidden;
+}
+
+.train-track {
+  display:flex;
+  transition:transform 0.6s ease-in-out;
+  gap:22px;
+}
+
+.train-card {
+  flex:0 0 320px;
+  background:var(--card);
+  border-radius:18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+  transition:transform 0.35s;
+}
+.train-card:hover {
+  transform:scale(1.04);
+}
+
+.train-img {
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  display:block;
+}
+
+.train-name {
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:linear-gradient(90deg,rgba(0,0,0,0.65),rgba(212,69,123,0.65));
+  color:#fff;
+  font-size:1.2rem;
+  font-weight:700;
+  padding:14px;
+  text-align:left;
+  letter-spacing:.5px;
+}
+
+/* Controls */
+.carousel-btn {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:#fff;
+  border:none;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  font-size:1.6rem;
+  color:var(--accent);
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  cursor:pointer;
+  transition:background 0.2s;
+  z-index:2;
+}
+.carousel-btn:hover { background:#ffe7f2; }
+.carousel-btn.prev { left:10px; }
+.carousel-btn.next { right:10px; }
+
+/* Responsive */
+@media (max-width:900px){
+  .train-card { flex:0 0 80vw; }
+}
+@media (max-width:500px){
+  .luxury-header{ font-size:1.2rem;}
+  .train-card{ flex:0 0 88vw; }
+  .train-name{ font-size:1rem; }
+}
+
 
     /* All over feature a review */
     .pay-title {
@@ -186,128 +186,145 @@
 }
 
 /* Specail offer in flight ticket */
- .offers-section {
-      max-width:1200px;
-      margin:40px auto 28px auto;
-      background:#fff;
-      border-radius:24px;
-      box-shadow:0 2px 24px #cfcfcf33;
-      padding:34px 36px 28px 36px;
-    }
-    .offers-title {
-      font-size:2em;
-      font-weight:600;
-      color:#2b3545;
-      margin-bottom:18px;
-    }
-    .slider-row {
-      position:relative;
-      overflow:hidden;
-      padding-bottom:18px;
-      margin-bottom:17px;
-    }
-    .slider-track {
-      display:flex;
-      gap:24px;
-      transition:transform 0.7s cubic-bezier(.75,.01,.45,.97);
-      will-change:transform;
-    }
-    .offer-card {
-      background:#fff;
-      border-radius:18px;
-      box-shadow:0 2px 16px #d8405822;
-      flex:0 0 350px;
-      min-height:212px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:row;
-      align-items:flex-start;
-      position:relative;
-    }
-    .offer-img {
-      width:110px;height:100%;object-fit:cover;bvertical-align:middle;background:#fcfcff;flex-shrink:0;border:none;
-    }
-    .offer-details {
-      padding:18px 0 18px 16px;
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-    }
-    .offer-label {
-      font-size:1.09em;
-      font-weight:700;
-      color:#d84058;
-      margin-bottom:7px;
-      letter-spacing:.2px;
-    }
-    .offer-desc, .offer-fine {
-      font-size:1em;
-      color:#302322;
-    }
-    .offer-fine {
-      font-size:0.97em;
-      color:#7c7c7c;
-      margin-top:6px;
-      margin-bottom:9px;
-    }
-    .offer-code {
-      display:inline-block;
-      background:#ffb2c0;
-      color:#b9374b;
-      border-radius:10px;
-      font-weight:600;
-      padding:4px 16px;
-      font-size:1em;
-      margin-bottom:7px;
-      margin-top:7px;
-      border:none;
-    }
-    .offer-link {
-      color:#1e3797;
-      font-size:0.98em;
-      text-decoration:none;
-      margin-top:6px;
-      font-weight:500;
-      transition:color 0.14s;
-    }
-    .offer-link:hover { color:#d84058; text-decoration:underline;}
-    .slider-controls {
-      position:absolute;
-      top:40%;
-      width:100%;
-      left:0;display:flex;justify-content:space-between;pointer-events:none;
-    }
-    .slider-btn {
-      pointer-events:auto;
-      background:#fff;
-      border-radius:50%;
-      border:none;
-      font-size:2em;
-      color:#d84058;
-      box-shadow:0 2px 14px #d8405855;
-      cursor:pointer;
-      width:48px;
-      height:48px;
-      margin:0 4px;
-      display:flex;align-items:center;justify-content:center;
-      transition:background 0.15s;
-      z-index:10;
-    }
-    .slider-btn:active { background:#ffefef; color:#c6112e;}
-    .offers-view {text-align:center; margin-top:22px;}
-    .offers-view a { font-size:1.17em; color:#156bf8; text-decoration:none; font-weight:600; transition:color 0.13s;}
-    .offers-view a:hover { color:#d84058;}
-    @media(max-width:900px){
-      .offers-section{max-width:98vw;padding:9px 1vw 12px 4vw;}
-      .slider-track{gap:14px;}
-      .offer-card{flex-basis:92vw;}
-    }
-    @media(max-width:670px){
-      .offer-card{flex-basis:99vw;}
-      .offers-section{padding:2vw 0;}
-      .offers-title{font-size:1.23em;}
-    }
+.offers-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 2px 28px rgba(180, 64, 88, 0.18);
+  padding: 30px 32px;
+  overflow: hidden;
+}
+
+.offers-title {
+  font-size: 2em;
+  font-weight: 700;
+  color: #2b3545;
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.slider-row {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  gap: 22px;
+  transition: transform 0.7s cubic-bezier(.75,.01,.45,.97);
+  will-change: transform;
+}
+
+.offer-card {
+  flex: 0 0 340px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(216, 64, 88, 0.25);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.offer-card:hover {
+  transform: translateY(-6px);
+}
+
+.offer-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.offer-details {
+  padding: 16px;
+}
+.offer-label {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #d84058;
+  margin-bottom: 6px;
+}
+.offer-desc {
+  font-size: 0.95em;
+  color: #333;
+}
+.offer-fine {
+  font-size: 0.85em;
+  color: #777;
+  margin-top: 6px;
+}
+.offer-code {
+  display: inline-block;
+  background: #ffb2c0;
+  color: #b9374b;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 4px 14px;
+  font-size: 0.9em;
+  margin: 8px 0;
+}
+.offer-link {
+  font-size: 0.9em;
+  color: #1e3797;
+  text-decoration: none;
+  font-weight: 500;
+}
+.offer-link:hover {
+  color: #d84058;
+  text-decoration: underline;
+}
+
+.slider-controls {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.slider-btn {
+  pointer-events: auto;
+  background: #fff;
+  border-radius: 50%;
+  border: none;
+  font-size: 2em;
+  color: #d84058;
+  box-shadow: 0 2px 14px rgba(216, 64, 88, 0.4);
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+  z-index: 10;
+}
+.slider-btn:hover {
+  transform: scale(1.1);
+  background: #fff3f5;
+}
+.slider-btn:active {
+  background: #ffefef;
+  color: #c6112e;
+}
+
+.offers-view { text-align: center; margin-top: 20px; }
+.offers-view a {
+  font-size: 1.1em;
+  color: #156bf8;
+  font-weight: 600;
+  text-decoration: none;
+}
+.offers-view a:hover {
+  color: #d84058;
+}
+
+@media(max-width: 900px) {
+  .offer-card { flex: 0 0 80vw; }
+}
+@media(max-width: 600px) {
+  .offer-card { flex: 0 0 92vw; }
+  .offers-title { font-size: 1.4em; }
+}
 
     /* footer slide */
 .hero-gradient {  background: linear-gradient(90deg, #1d1f31 70%);
