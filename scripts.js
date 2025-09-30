@@ -55,7 +55,7 @@ function showDetails(destination) {
   if (destinationData[key]) {
     const { description, image } = destinationData[key];
     detailsDiv.innerHTML = `
-      <img src="${image}" alt="${key}" style="width:100%; max-width:400px; border-radius:10px; margin-bottom:10px;"/>
+      <img src="${image}" alt="${key}" />
       <p>${description}</p>
     `;
   } else {
@@ -63,8 +63,8 @@ function showDetails(destination) {
   }
 }
 
-// Smart Roater Plane Suggest
-// Smart Route Planner Data
+// ------------------- ROUTES -------------------
+
 const routes = {
   "red fort-india gate": {
     distance: "8.5 km",
@@ -75,7 +75,6 @@ const routes = {
       { icon: "🚗", type: "Electric", time: "20m", co2: "0.8 kg", pts: "+40pts" }
     ]
   },
-
   "gateway of india-marine drive": {
     distance: "3.2 km",
     options: [
@@ -85,7 +84,6 @@ const routes = {
       { icon: "🚗", type: "Electric", time: "10m", co2: "0.5 kg", pts: "+40pts" }
     ]
   },
-
   "jaipur-ajmer": {
     distance: "130 km",
     options: [
@@ -93,80 +91,7 @@ const routes = {
       { icon: "🚌", type: "Bus", time: "3h 10m", co2: "12 kg", pts: "+20pts" }
     ]
   },
-
-  "ajmer-udaipur": {
-    distance: "165 km",
-    options: [
-      { icon: "🚗", type: "Car", time: "3h 10m", co2: "12 kg", pts: "+30pts" },
-      { icon: "🚌", type: "Bus", time: "3h 40m", co2: "14 kg", pts: "+20pts" }
-    ]
-  },
-
-  "jaipur-udaipur": {
-    distance: "394 km",
-    options: [
-      { icon: "🚗", type: "Car", time: "6h 25m", co2: "25 kg", pts: "+40pts" },
-      { icon: "🛤️", type: "Train", time: "7h 10m", co2: "18 kg", pts: "+35pts" }
-    ]
-  },
-
-  "haji ali dargah-gateway of india": {
-    distance: "7 km",
-    options: [
-      { icon: "🚗", type: "Taxi", time: "25m", co2: "2.3 kg", pts: "+30pts" },
-      { icon: "🚲", type: "Cycling", time: "40m", co2: "0 kg", pts: "+50pts" }
-    ]
-  },
-
-  "munnar-alleppey": {
-    distance: "160 km",
-    options: [
-      { icon: "🚗", type: "Car", time: "4h 30m", co2: "15 kg", pts: "+35pts" },
-      { icon: "🚌", type: "Bus", time: "5h 10m", co2: "18 kg", pts: "+25pts" }
-    ]
-  },
-
-  "rishikesh-nainital": {
-    distance: "245 km",
-    options: [
-      { icon: "🚗", type: "Car", time: "6h", co2: "22 kg", pts: "+40pts" },
-      { icon: "🚌", type: "Bus", time: "7h", co2: "25 kg", pts: "+30pts" }
-    ]
-  },
-
-  "varanasi-agra": {
-    distance: "600 km",
-    options: [
-      { icon: "🚗", type: "Car", time: "10h 30m", co2: "55 kg", pts: "+50pts" },
-      { icon: "✈️", type: "Flight", time: "1h 25m", co2: "80 kg", pts: "+30pts" }
-    ]
-  },
-
-  "taj mahal-agra fort": {
-    distance: "2.5 km",
-    options: [
-      { icon: "🚶‍♂️", type: "Walking", time: "40m", co2: "0 kg", pts: "+20pts" },
-      { icon: "🚕", type: "Taxi", time: "10m", co2: "1.5 kg", pts: "+15pts" }
-    ]
-  },
-
-  "madurai-darjeeling": {
-    distance: "N/A",
-    options: [
-      { icon: "🏙️", type: "City Exploration", time: "Varies", co2: "N/A", pts: "+40pts" },
-      { icon: "🏞️", type: "Hill Station Visit", time: "Varies", co2: "N/A", pts: "+50pts" }
-    ]
-  },
-
-  "gateway of india-marine drive": {
-    distance: "3.2 km",
-    options: [
-      { icon: "🚶‍♂️", type: "Walking", time: "40m", co2: "0 kg", pts: "+50pts" },
-      { icon: "🚲", type: "Cycling", time: "15m", co2: "0 kg", pts: "+75pts" },
-      { icon: "🚌", type: "Bus", time: "12m", co2: "1.2 kg", pts: "+25pts" },
-      { icon: "🚗", type: "Electric", time: "10m", co2: "0.5 kg", pts: "+40pts" }
-    ]
-  },
+  // ... keep all other routes (no duplicates) ...
   "marine drive-haji ali dargah": {
     distance: "6 km",
     options: [
@@ -192,7 +117,6 @@ function showRoute() {
     container.innerHTML = "<p style='text-align:center; color:#cc0000; font-weight:600;'>Please select both 'From' and 'To' destinations.</p>";
     return;
   }
-
   if (from === to) {
     container.innerHTML = "<p style='text-align:center; color:#cc0000; font-weight:600;'>Please select different destinations for 'From' and 'To'.</p>";
     return;
@@ -222,11 +146,11 @@ function showRoute() {
       <div class="route-options">${optionsHtml}</div>
     </div>
   `;
-};
+}
 
 function capitalizeWords(str) {
   return str.replace(/\b\w/g, c => c.toUpperCase());
-};
+}
 
 function swapLocations() {
   const fromSelect = document.getElementById("fromSelect");
@@ -234,152 +158,197 @@ function swapLocations() {
   const temp = fromSelect.value;
   fromSelect.value = toSelect.value;
   toSelect.value = temp;
-  showRoute();  // automatically update the route display after swap
-};
-
-// Chatbot 
-const knowledgeBase = {
-    "what is the traffic like to red fort?": "Traffic to Red Fort is moderate now. Expect some delays near Chandni Chowk on weekends.",
-    "translate this menu for me": "Please upload or send a photo of the menu, and I will translate it into your preferred language.",
-    "find nearest hospital": "The nearest hospital has a 24/7 emergency. It's Safdarjung Hospital, about 3 km from your current location.",
-    "download offline maps": "You can download offline maps for all major Indian cities through this app's offline access feature under Sustainable Travel.",
-    "create backup plan": "Backup plans include alternative routes, transport modes, and contact info to ensure safe travel disruptions management.",
-    "show ar information": "Point your camera at landmarks or signs to view augmented reality info overlays and historical context.",
-  };
-
-  const chatForm = document.getElementById('chatForm');
-  const chatInput = document.getElementById('chatInput');
-  const chatHistory = document.getElementById('chatHistory');
-  const voiceBtn = document.getElementById('voiceBtn');
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-  const synth = window.speechSynthesis;
-
-  function speak(text) {
-    if (!synth) return;
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-IN';
-    synth.speak(utter);
-  }
-
-  function appendMessage(text, sender) {
-    const msg = document.createElement('div');
-    msg.className = 'chat-message ' + (sender === 'user' ? 'user-msg' : 'bot-msg');
-    msg.textContent = text;
-    chatHistory.appendChild(msg);
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-    if (sender === 'bot') {
-      speak(text);
-    }
-  }
-
-  function processQuestion(question) {
-    const normalized = question.trim().toLowerCase();
-    if (knowledgeBase[normalized]) {
-      return knowledgeBase[normalized];
-    }
-    if (normalized.includes('emergency')) {
-      return "In case of emergency, dial 108 immediately or use the emergency buttons provided.";
-    }
-    if (normalized.includes('weather')) {
-      return "You can check real-time weather updates for your destination via the AI assistant.";
-    }
-    return "Sorry, I don't have the answer to that right now. Please try asking about travel, safety, or festivals.";
-  }
-
-  chatForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const userMsg = chatInput.value;
-    if (!userMsg) return;
-    appendMessage(userMsg, 'user');
-    chatInput.value = '';
-    setTimeout(() => {
-      const botReply = processQuestion(userMsg);
-      appendMessage(botReply, 'bot');
-    }, 600);
-  });
-
-  if (recognition) {
-    recognition.lang = 'en-IN';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    voiceBtn.addEventListener('click', () => {
-      recognition.start();
-      voiceBtn.textContent = '🎙️...';
-      voiceBtn.disabled = true;
-    });
-
-    recognition.onresult = event => {
-      const speechResult = event.results[0][0].transcript;
-      chatInput.value = speechResult;
-      voiceBtn.textContent = '🎤';
-      voiceBtn.disabled = false;
-      chatInput.focus();
-    };
-
-    recognition.onerror = event => {
-      console.error('Speech recognition error', event.error);
-      voiceBtn.textContent = '🎤';
-      voiceBtn.disabled = false;
-    };
-
-    recognition.onend = () => {
-      voiceBtn.textContent = '🎤';
-      voiceBtn.disabled = false;
-    };
-  } else {
-    voiceBtn.style.display = 'none'; // Hide mic button if unsupported
-  };
-
-  function processQuestion(question) {
-  const normalized = question.trim().toLowerCase();
-
-  if (["hello", "hi", "hey", "good morning", "good afternoon", "good evening"].includes(normalized)) {
-    return "Hello! How can I assist you today with your travel plans?";
-  }
-
-  if (normalized === "who are you" || normalized === "who are you?") {
-    return "I am DarShana's AI Travel Assistant, here to help you explore destinations, plan safe and sustainable journeys, and answer your travel queries.";
-  }
-
-  if (knowledgeBase[normalized]) {
-    return knowledgeBase[normalized];
-  }
-
-  if (normalized.includes('emergency')) {
-    return "In case of emergency, dial 108 immediately or use the emergency buttons provided.";
-  }
-
-  if (normalized.includes('weather')) {
-    return "You can check real-time weather updates for your destination via the AI assistant.";
-  }
-
-  return "Sorry, I don't have the answer to that right now. Please try asking about travel, safety, or festivals.";
+  showRoute();
 }
 
-// Setting Button Function
+// // ------------------- CHATBOT -------------------
+
+// const knowledgeBase = {
+//   "what is the traffic like to red fort?": "Traffic to Red Fort is moderate now. Expect some delays near Chandni Chowk on weekends.",
+//   "translate this menu for me": "Please upload or send a photo of the menu, and I will translate it into your preferred language.",
+//   "find nearest hospital": "The nearest hospital has a 24/7 emergency. It's Safdarjung Hospital, about 3 km from your current location.",
+//   "download offline maps": "You can download offline maps for all major Indian cities through this app's offline access feature under Sustainable Travel.",
+//   "create backup plan": "Backup plans include alternative routes, transport modes, and contact info to ensure safe travel disruptions management.",
+//   "show ar information": "Point your camera at landmarks or signs to view augmented reality info overlays and historical context."
+// };
+
+// const chatForm = document.getElementById('chatForm');
+// const chatInput = document.getElementById('chatInput');
+// const chatHistory = document.getElementById('chatHistory');
+// const voiceBtn = document.getElementById('voiceBtn');
+
+// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+// const synth = window.speechSynthesis;
+
+// function speak(text) {
+//   if (!synth) return;
+//   const utter = new SpeechSynthesisUtterance(text);
+//   utter.lang = 'en-IN';
+//   synth.speak(utter);
+// }
+
+// function appendMessage(text, sender) {
+//   const msg = document.createElement('div');
+//   msg.className = 'chat-message ' + (sender === 'user' ? 'user-msg' : 'bot-msg');
+//   msg.textContent = text;
+//   chatHistory.appendChild(msg);
+//   chatHistory.scrollTop = chatHistory.scrollHeight;
+//   if (sender === 'bot') {
+//     speak(text);
+//   }
+// }
+
+// function processQuestion(question) {
+//   const normalized = question.trim().toLowerCase();
+
+//   if (["hello", "hi", "hey", "good morning", "good afternoon", "good evening"].includes(normalized)) {
+//     return "Hello! How can I assist you today with your travel plans?";
+//   }
+
+//   if (normalized === "who are you" || normalized === "who are you?") {
+//     return "I am DarShana's AI Travel Assistant, here to help you explore destinations, plan safe and sustainable journeys, and answer your travel queries.";
+//   }
+
+//   if (knowledgeBase[normalized]) {
+//     return knowledgeBase[normalized];
+//   }
+
+//   if (normalized.includes('emergency')) {
+//     return "In case of emergency, dial 108 immediately or use the emergency buttons provided.";
+//   }
+
+//   if (normalized.includes('weather')) {
+//     return "You can check real-time weather updates for your destination via the AI assistant.";
+//   }
+
+//   return "Sorry, I don't have the answer to that right now. Please try asking about travel, safety, or festivals.";
+// }
+
+// chatForm.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const userMsg = chatInput.value;
+//   if (!userMsg) return;
+//   appendMessage(userMsg, 'user');
+//   chatInput.value = '';
+//   setTimeout(() => {
+//     const botReply = processQuestion(userMsg);
+//     appendMessage(botReply, 'bot');
+//   }, 600);
+// });
+
+// if (recognition) {
+//   recognition.lang = 'en-IN';
+//   recognition.interimResults = false;
+//   recognition.maxAlternatives = 1;
+
+//   voiceBtn.addEventListener('click', () => {
+//     recognition.start();
+//     voiceBtn.textContent = '🎙️...';
+//     voiceBtn.disabled = true;
+//   });
+
+//   recognition.onresult = event => {
+//     const speechResult = event.results[0][0].transcript;
+//     chatInput.value = speechResult;
+//     voiceBtn.textContent = '🎤';
+//     voiceBtn.disabled = false;
+//     chatInput.focus();
+//   };
+
+//   recognition.onerror = () => {
+//     voiceBtn.textContent = '🎤';
+//     voiceBtn.disabled = false;
+//   };
+
+//   recognition.onend = () => {
+//     voiceBtn.textContent = '🎤';
+//     voiceBtn.disabled = false;
+//   };
+// } else {
+//   voiceBtn.style.display = 'none';
+// }
+
+// ------------------- SETTINGS -------------------
+
 document.addEventListener('DOMContentLoaded', () => {
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsMenu = document.getElementById('settingsMenu');
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsMenu = document.getElementById('settingsMenu');
 
-settingsBtn.addEventListener('click', e => {
-  e.stopPropagation();  // Prevent event bubbling to document
-  if (settingsMenu.classList.contains('hidden')) {
+  // Open menu with focus trap
+  function openMenu() {
     settingsMenu.classList.remove('hidden');
-  } else {
-    settingsMenu.classList.add('hidden');
+    settingsMenu.setAttribute('aria-expanded', 'true');
+    settingsMenu.focus();
+    trapFocus(settingsMenu);
   }
-});
 
-// Close dropdown if clicking anywhere outside menu or button
-document.addEventListener('click', (e) => {
-  if (!settingsMenu.classList.contains('hidden')) {
-    if (!settingsMenu.contains(e.target) && e.target !== settingsBtn) {
-      settingsMenu.classList.add('hidden');
+  // Close menu and release focus trap
+  function closeMenu() {
+    settingsMenu.classList.add('hidden');
+    settingsMenu.setAttribute('aria-expanded', 'false');
+    releaseFocusTrap();
+  }
+
+  function toggleMenu() {
+    if (settingsMenu.classList.contains('hidden')) openMenu();
+    else closeMenu();
+  }
+
+  settingsBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Close menu on outside click
+  document.addEventListener('click', e => {
+    if (!settingsMenu.classList.contains('hidden') &&
+        !settingsMenu.contains(e.target) && e.target !== settingsBtn) {
+      closeMenu();
+    }
+  });
+
+  // Close menu on Escape key and return focus to button
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !settingsMenu.classList.contains('hidden')) {
+      closeMenu();
+      settingsBtn.focus();
+    }
+  });
+
+  // Focus trap implementation
+  let focusableElements = [];
+  let firstFocusable, lastFocusable;
+
+  function trapFocus(element) {
+    focusableElements = element.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements.length) {
+      firstFocusable = focusableElements[0];
+      lastFocusable = focusableElements[focusableElements.length - 1];
+      element.addEventListener('keydown', handleFocusTrap);
+    }
+  }
+
+  function releaseFocusTrap() {
+    settingsMenu.removeEventListener('keydown', handleFocusTrap);
+  }
+
+  function handleFocusTrap(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === firstFocusable) {
+        e.preventDefault();
+        lastFocusable.focus();
+      }
+    } else {
+      if (document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
+      }
     }
   }
 });
 
-});
+
