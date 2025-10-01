@@ -7,7 +7,8 @@ window.addEventListener("load", () => {
       document.querySelector("nav.navbar").style.display = "flex"; // show navbar
       document.getElementById("main-content").style.display = "block"; 
     }, 1000);
-  }, 5000);
+  }, 2000);
 });
+
 
 
