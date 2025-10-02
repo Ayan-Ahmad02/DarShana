@@ -258,15 +258,33 @@
 </section>
 
   <!-- AI recommandation -->
-  <div class="container">
-    <div id="step-indicator" class="step-indicator">
+  <div class="scanner-box" aria-label="Face Mood Scanner">
+    <div class="scanner-title"><i class="fa-regular fa-face-smile-beam"></i> Face Mood Scanner</div>
+    <button id="startBtn" aria-pressed="false" aria-label="Start face mood scan">
+      <i class="fa-solid fa-play"></i> Start Face Scan
+    </button>
+    <div class="video-wrapper" aria-live="polite" aria-atomic="true">
+      <span class="camera-border" aria-hidden="true">
+        <video id="video" autoplay muted playsinline></video>
+      </span>
+    </div>
+    <div class="webcam-status" id="webcamStatus" aria-live="polite"></div>
+    <div id="progress" aria-live="polite"></div>
+    <div id="result" role="region" aria-label="Detected Mood">
+      <span class="emoji" aria-hidden="true">😐</span>
+      <span id="mood-label">Mood: Not detected</span>
+    </div>
+  </div>
+
+  <main class="container" role="main" aria-label="Mood driven destination selection">
+    <div id="step-indicator" class="step-indicator" aria-hidden="true">
       <span class="dot active"></span>
       <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
     </div>
-    <div id="steps"></div>
-  </div>
+    <div id="steps" tabindex="0" aria-live="polite" aria-atomic="true"></div>
+  </main>
   <!-- discovering fastivals and culture event -->
     <section class="festivals-section" id="fastivals">
     <div class="festivals-header">
@@ -859,6 +877,7 @@
       </span>
     </div>
   </footer>
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
   <script src="script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="scripts.js"></script>
