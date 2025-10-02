@@ -1,469 +1,606 @@
-const stepsDiv = document.getElementById('steps');
-const stepIndicator = document.getElementById('step-indicator').children;
+    // Face API models and elements
+    const moodEmojis = {
+      happy:    "😄",
+      sad:      "😢",
+      angry:    "😠",
+      surprised:"😮",
+      fearful:  "😱",
+      disgusted:"🤢",
+      neutral:  "😐"
+    };
 
-let step = 0;
-let moodSelected = null;
-let energyLevel = 5;
-let socialLevel = 5;
-let adventureLevel = 5;
+    const startBtn = document.getElementById('startBtn');
+    const video = document.getElementById('video');
+    const result = document.getElementById('result');
+    const moodLabel = document.getElementById('mood-label');
+    const emoji = result.querySelector(".emoji");
+    const webcamStatus = document.getElementById('webcamStatus');
+    const progress = document.getElementById('progress');
+    let scanActive = false;
+    let detectionInterval;
+    let streamRef;
 
-const moods = [
-  {emoji:"😊", label:"Happy & Excited"},
-  {emoji:"😌", label:"Calm & Peaceful"},
-  {emoji:"😲", label:"Curious & Explorative"},
-  {emoji:"💪", label:"Energetic & Active"},
-  {emoji:"🧘‍♂️", label:"Reflective & Mindful"},
-  {emoji:"🎉", label:"Celebratory & Social"}
-];
+    // Multi-step mood analyzer vars
+    const stepsDiv = document.getElementById('steps');
+    const stepIndicator = document.getElementById('step-indicator').children;
 
-// Dynamic destination pool mapped to moods & preferences
-const destinationPool = [
-  {
-    title: "Rishikesh, Uttarakhand",
-    label: "Spiritual",
-    moods: [1, 4], // Calm, Reflective
-    img: "https://t4.ftcdn.net/jpg/03/01/35/03/360_F_301350326_5gAQhd0fH2faDncnsGBJqCxroCUCsQVn.jpg",
-    tags: ["Yoga", "River Rafting", "Temple Visits"],
-    energy: [4,10], social: [1,7], adventure: [2,8]
-  },
-  {
-    title: "Goa Beaches",
-    label: "Relaxation",
-    moods: [0, 5], // Happy, Social
-    img: "https://t3.ftcdn.net/jpg/02/43/24/76/360_F_243247620_Clg6rXsX4K0lhPWip3oo9Oee28J30L23.jpg",
-    tags: ["Beach", "Water Sports", "Nightlife"],
-    energy: [5,10], social: [4,10], adventure: [1,7]
-  },
-  {
-    title: "Ladakh, J&K",
-    label: "Adventure",
-    moods: [2, 3], // Curious, Energetic
-    img: "https://media.istockphoto.com/id/1391003874/photo/scenic-landscape-view-of-himalaya-mountain.jpg?s=612x612&w=0&k=20&c=IoGJQ3NPucbZqmKaej7fgB7iYkmEnhsDhPZySsU3agw=",
-    tags: ["Trekking", "Motorcycle Tours", "Camping"],
-    energy: [7,10], social: [3,8], adventure: [8,10]
-  },
-  {
-    title: "Varanasi, UP",
-    label: "Culture",
-    moods: [1, 4], // Calm, Reflective
-    img: "https://media.istockphoto.com/id/537988165/photo/varanasi.jpg?s=612x612&w=0&k=20&c=fFpEL17MiQJx5NkkNIVrTsesd2E8b04SCgzjfhUmQ7g=",
-    tags: ["Ganga Aarti", "Temples", "Ghats"],
-    energy: [1,6], social: [2,8], adventure: [1,4]
-  },
-  {
-    title: "Jaipur, Rajasthan",
-    label: "Heritage",
-    moods: [0,2], // Happy, Curious
-    img: "https://e1.pxfuel.com/desktop-wallpaper/649/470/desktop-wallpaper-rajasthan-culture-rajasthan.jpg",
-    tags: ["Palaces", "Forts", "Food"],
-    energy: [5,10], social: [1,10], adventure: [3,8]
-  },
-  {
-    title: "Kerala Backwaters",
-    label: "Nature",
-    moods: [1, 4], // Calm, Reflective
-    img: "https://t3.ftcdn.net/jpg/12/61/62/58/360_F_1261625896_moxQeeYntW01yx5WtChl5kNRrRnn6Hmg.jpg",
-    tags: ["Houseboat", "Ayurveda", "Lakes"],
-    energy: [1,5], social: [1,7], adventure: [1,5]
-  },
-  {
-    title: "Mumbai",
-    label: "Urban Life",
-    moods: [0, 5], // Happy, Social
-    img: "https://t4.ftcdn.net/jpg/01/46/43/87/360_F_146438747_3XYwVkfnYZuukBZYmDM8xeoqENzyhAqa.jpg",
-    tags: ["Nightlife", "Bollywood", "Street Food"],
-    energy: [5,10], social: [5,10], adventure: [1,6]
-  },
-  // Add more destinations similarly
-];
+    let step = 0;
+    let moodSelected = null;
+    let energyLevel = 5;
+    let socialLevel = 5;
+    let adventureLevel = 5;
 
-function renderStep() {
-  // Update indicator dots
-  if (stepIndicator) {
-    [...stepIndicator].forEach((dot, idx) => dot.className = 'dot' + (idx === step ? ' active' : ''));
-  }
-  // Steps logic
-  if(step === 0){
-    stepsDiv.innerHTML = `
-      <h1>AI Mood Analyzer</h1>
-      <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
-      <h2>How are you feeling today?</h2>
-      <div class="mood-options">
-        ${moods.map((m, i) =>
-          `<div class="mood-option${moodSelected===i?' selected':''}" onclick="selectMood(${i})">
-            <span>${m.emoji}</span>
-            ${m.label}
-          </div>`
-        ).join('')}
-      </div>
-      <div class="btn-row">
-        <button class="btn-outline" disabled>Previous</button>
-        <button class="btn-outline"${moodSelected===null?' disabled':''} onclick="nextStep()">Next</button>
-      </div>
-    `;
-  }
-  else if(step === 1){
-    let levelText = energyLevel < 3 ? "Low" : (energyLevel < 7 ? "Moderate" : "High");
-    stepsDiv.innerHTML = `
-      <h1>AI Mood Analyzer</h1>
-      <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
-      <div class="slider-section">
-        <div class="slider-title">What's your energy level?</div>
-        <div class="emoji-large">😊</div>
-        <div class="slider-value">${levelText}</div>
-        <input type="range" min="1" max="10" value="${energyLevel}" id="energy-slider"/>
-        <div class="slider-labels">
-          <span>Low</span>
-          <span>High</span>
-        </div>
-        <div style="margin-top:10px;"><span style="color:#888;">Energy Level: ${energyLevel}/10</span></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn-outline" onclick="nextStep()">Next</button>
-      </div>
-    `;
-    setTimeout(()=>{
-      document.getElementById('energy-slider').addEventListener("input", e=>{
-        energyLevel = parseInt(e.target.value);
-        renderStep();
-      });
-    }, 0);
-  }
-  else if(step === 2){
-    let levelText = socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Groups" : "Groups");
-    stepsDiv.innerHTML = `
-      <h1>AI Mood Analyzer</h1>
-      <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
-      <div class="slider-section">
-        <div class="slider-title">How social do you want to be?</div>
-        <div class="emoji-large">👥</div>
-        <div class="slider-value">${levelText}</div>
-        <input type="range" min="1" max="10" value="${socialLevel}" id="social-slider"/>
-        <div class="slider-labels">
-          <span>Solo</span>
-          <span>Group</span>
-        </div>
-        <div style="margin-top:10px;"><span style="color:#888;">Social Level: ${socialLevel}/10</span></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn-outline" onclick="nextStep()">Next</button>
-      </div>
-    `;
-    setTimeout(()=>{
-      document.getElementById('social-slider').addEventListener("input", e=>{
-        socialLevel = parseInt(e.target.value);
-        renderStep();
-      });
-    }, 0);
-  }
-  else if(step === 3){
-    let text = adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild Adventure" : "Adventurous");
-    stepsDiv.innerHTML = `
-      <h1>AI Mood Analyzer</h1>
-      <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
-      <div class="slider-section">
-        <div class="slider-title">How adventurous are you feeling?</div>
-        <div class="emoji-large">🚶</div>
-        <div class="slider-value">${text}</div>
-        <input type="range" min="1" max="10" value="${adventureLevel}" id="adventure-slider"/>
-        <div class="slider-labels">
-          <span>Safe</span>
-          <span>Adventurous</span>
-        </div>
-        <div style="margin-top:10px;"><span style="color:#888;">Adventure Level: ${adventureLevel}/10</span></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-outline" onclick="prevStep()">Previous</button>
-        <button class="btn-outline" onclick="showRecommendations()">Analyze My Mood</button>
-      </div>
-    `;
-    setTimeout(()=>{
-      document.getElementById('adventure-slider').addEventListener("input", e=>{
-        adventureLevel = parseInt(e.target.value);
-        renderStep();
-      });
-    }, 0);
-  }
-}
+    const moods = [
+      {emoji:"😊", label:"Happy & Excited"},
+      {emoji:"😌", label:"Calm & Peaceful"},
+      {emoji:"😲", label:"Curious & Explorative"},
+      {emoji:"💪", label:"Energetic & Active"},
+      {emoji:"🧘‍♂️", label:"Reflective & Mindful"},
+      {emoji:"🎉", label:"Celebratory & Social"}
+    ];
 
-window.selectMood = function(idx){
-  moodSelected = idx;
-  renderStep();
-}
+    // Map face-api moods to your mood indices to sync
+    // faceapi expressions: happy, sad, angry, surprised, fearful, disgusted, neutral
+    // Your moods: 0=Happy,1=Calm,2=Curious,3=Energetic,4=Reflective,5=Social/Celebratory
+    // Approximate mapping:
+    const faceToMoodIndex = {
+      happy: 0,
+      sad: 1,
+      angry: null,        // no direct map, so ignore or fallback
+      surprised: 2,
+      fearful: 4,
+      disgusted: null,
+      neutral: 1          // map neutral to Calm & Peaceful for starter
+    };
 
-window.nextStep = function(){
-  if(step < 3) step++;
-  renderStep();
-}
+    // UTILS: Show webcam message and reset UI
+    function setWebcamStatus(msg) {
+      webcamStatus.textContent = msg || "";
+    }
 
-window.prevStep = function(){
-  if(step > 0) step--;
-  renderStep();
-}
+    // PROGRESS display
+    function setProgress(msg) {
+      progress.innerHTML = msg || "";
+    }
 
-// Filter destinations dynamically based on all params
-function getPersonalizedDestinations() {
-  // Generate preference ranges
-  let mood = moodSelected;
-  let energy = energyLevel;
-  let social = socialLevel;
-  let adventure = adventureLevel;
-  // Filter destinations by checking if user score is within pool range
-  let results = destinationPool.filter(place => {
-    let moodMatch = place.moods.includes(mood);
-    let energyMatch = (energy >= place.energy[0] && energy <= place.energy[1]);
-    let socialMatch = (social >= place.social[0] && social <= place.social[1]);
-    let adventureMatch = (adventure >= place.adventure[0] && adventure <= place.adventure[1]);
-    return moodMatch && energyMatch && socialMatch && adventureMatch;
-  });
-  // Fallback: If less than 3 found, pick top-3 by mood priority
-  if (results.length === 0){
-    results = destinationPool.filter(place=>place.moods.includes(mood)).slice(0,3);
-  }
-  // Final fallback: show any 3 distinct
-  if(results.length === 0){
-    results = destinationPool.slice(0,3);
-  }
-  // Randomize and pick up to 3
-  results = results.sort(()=>Math.random()-0.5).slice(0,3);
-  return results;
-}
+    // Show mood on face scanner box
+    function showMood(mood, confidence) {
+      const topMood = moodEmojis[mood] ? mood : "neutral";
+      result.classList.add("show");
+      emoji.textContent = moodEmojis[topMood] || "😐";
+      if (confidence !== undefined) {
+        moodLabel.innerHTML = `Mood: ${topMood.charAt(0).toUpperCase() + topMood.slice(1)} <span style="color:#8f37fb;font-size:0.75em;">(${Math.round(confidence * 100)}%)</span>`;
+      } else {
+        moodLabel.textContent = "Mood: " + (topMood.charAt(0).toUpperCase() + topMood.slice(1));
+      }
+      // Try linking detected mood to mood selector if on mood selection step and not manually overridden
+      if(step === 0 && !manualMoodOverride) {
+        const mappedIdx = faceToMoodIndex[topMood];
+        if(mappedIdx !== null && mappedIdx !== undefined) {
+          if(moodSelected !== mappedIdx) {
+            moodSelected = mappedIdx;
+            renderStep();
+          }
+        }
+      }
+    }
 
-window.showRecommendations = function(){
-  if (stepIndicator) {
-    [...stepIndicator].forEach((dot)=>dot.className='dot');
-  }
-  let recommendations = getPersonalizedDestinations();
-  stepsDiv.innerHTML = `
-    <h1>Your Personalized Recommendations</h1>
-    <div class="subtitle">Based on your current mood and preferences</div>
-    <div class="card-recommend">
-      ${recommendations.map(dest => `
-        <div class="recommend-card">
-          <img src="${dest.img}" alt="">
-          <div class="rc-info">
-            <div class="rc-title">${dest.title}</div>
-            <div class="rc-label">${dest.label}</div>
-            <div class="rc-tags">
-              ${dest.tags.map(tag=>`<span class="rc-tag">${tag}</span>`).join('')}
-            </div>
+    // Mood not detected
+    function noMood() {
+      result.classList.add("show");
+      emoji.textContent = "😐";
+      moodLabel.textContent = "Mood: Not detected";
+    }
+
+    // Load face-api models with progress
+    async function loadModels() {
+      setProgress("<span>Loading AI Models...</span>");
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/'),
+        faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/')
+      ]);
+      setProgress("<span style='color:#00bd7e;'>AI Ready!</span>");
+    }
+
+    // Start webcam for face scan
+    async function startWebcam() {
+      try {
+        streamRef = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+        video.srcObject = streamRef;
+        video.play();
+        setWebcamStatus('<span class="live-dot"></span>Webcam Active');
+        video.classList.remove("paused");
+        return true;
+      } catch (err) {
+        setWebcamStatus("Camera access denied or not found.");
+        setProgress("");
+        video.classList.add("paused");
+        return false;
+      }
+    }
+
+    // Start face mood scanning loop
+    async function startScan() {
+      startBtn.disabled = true;
+      startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Starting...';
+      setWebcamStatus('Starting camera...');
+      setProgress('');
+      scanActive = true;
+
+      const camOk = await startWebcam();
+      if (!camOk) {
+        startBtn.disabled = false;
+        startBtn.innerHTML = '<i class="fa-solid fa-play"></i> Start Face Scan';
+        return;
+      }
+      setWebcamStatus('<span class="live-dot"></span>Webcam Active');
+      setProgress('');
+
+      // Run detection loop
+      video.onplaying = () => {
+        if (detectionInterval) clearInterval(detectionInterval);
+        detectionInterval = setInterval(async () => {
+          if (!scanActive) return;
+          try {
+            const det = await faceapi
+              .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+              .withFaceExpressions();
+            if (det && det.expressions) {
+              const sorted = Object.entries(det.expressions).sort((a, b) => b[1] - a[1]);
+              let [top, confidence] = sorted[0];
+              showMood(top, confidence);
+            } else {
+              noMood();
+            }
+          } catch (e) {
+            noMood();
+          }
+        }, 450);
+      };
+    }
+
+    // Stop face scan and clean up
+    function cleanup() {
+      scanActive = false;
+      clearInterval(detectionInterval);
+      if (streamRef && streamRef.getTracks) {
+        streamRef.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+      }
+      setWebcamStatus('');
+      noMood();
+    }
+
+    // Button to toggle scan start/stop
+    let manualMoodOverride = false; // track if user manually selected mood to prevent overwriting by face scan
+
+    startBtn.onclick = async () => {
+      if (!scanActive) {
+        manualMoodOverride = false;
+        startBtn.disabled = true;
+        startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading Models...';
+        result.classList.remove("show");
+        await loadModels();
+        setProgress('');
+        startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Starting Camera...';
+        await startScan();
+        startBtn.style.opacity = "0.65";
+        startBtn.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Stop Scan';
+        startBtn.disabled = false;
+        startBtn.setAttribute('aria-pressed', 'true');
+      } else {
+        cleanup();
+        startBtn.disabled = false;
+        startBtn.innerHTML = '<i class="fa-solid fa-play"></i> Start Face Scan';
+        startBtn.style.opacity = "0.95";
+        webcamStatus.textContent = '';
+        progress.textContent = '';
+        result.classList.remove("show");
+        startBtn.setAttribute('aria-pressed', 'false');
+      }
+    };
+
+    // Multi-step mood analyzer code (with integrated moodSelected update from face scan)
+    // Destination data
+    const destinationPool = [
+      {
+        title: "Rishikesh, Uttarakhand",
+        label: "Spiritual",
+        moods: [1, 4], // Calm, Reflective
+        img: "https://t4.ftcdn.net/jpg/03/01/35/03/360_F_301350326_5gAQhd0fH2faDncnsGBJqCxroCUCsQVn.jpg",
+        tags: ["Yoga", "River Rafting", "Temple Visits"],
+        energy: [4,10], social: [1,7], adventure: [2,8]
+      },
+      {
+        title: "Goa Beaches",
+        label: "Relaxation",
+        moods: [0, 5], // Happy, Social
+        img: "https://t3.ftcdn.net/jpg/02/43/24/76/360_F_243247620_Clg6rXsX4K0lhPWip3oo9Oee28J30L23.jpg",
+        tags: ["Beach", "Water Sports", "Nightlife"],
+        energy: [5,10], social: [4,10], adventure: [1,7]
+      },
+      {
+        title: "Ladakh, J&K",
+        label: "Adventure",
+        moods: [2, 3], // Curious, Energetic
+        img: "https://media.istockphoto.com/id/1391003874/photo/scenic-landscape-view-of-himalaya-mountain.jpg?s=612x612&w=0&k=20&c=IoGJQ3NPucbZqmKaej7fgB7iYkmEnhsDhPZySsU3agw=",
+        tags: ["Trekking", "Motorcycle Tours", "Camping"],
+        energy: [7,10], social: [3,8], adventure: [8,10]
+      },
+      {
+        title: "Varanasi, UP",
+        label: "Culture",
+        moods: [1, 4], // Calm, Reflective
+        img: "https://media.istockphoto.com/id/537988165/photo/varanasi.jpg?s=612x612&w=0&k=20&c=fFpEL17MiQJx5NkkNIVrTsesd2E8b04SCgzjfhUmQ7g=",
+        tags: ["Ganga Aarti", "Temples", "Ghats"],
+        energy: [1,6], social: [2,8], adventure: [1,4]
+      },
+      {
+        title: "Jaipur, Rajasthan",
+        label: "Heritage",
+        moods: [0,2], // Happy, Curious
+        img: "https://e1.pxfuel.com/desktop-wallpaper/649/470/desktop-wallpaper-rajasthan-culture-rajasthan.jpg",
+        tags: ["Palaces", "Forts", "Food"],
+        energy: [5,10], social: [1,10], adventure: [3,8]
+      },
+      {
+        title: "Kerala Backwaters",
+        label: "Nature",
+        moods: [1, 4], // Calm, Reflective
+        img: "https://t3.ftcdn.net/jpg/12/61/62/58/360_F_1261625896_moxQeeYntW01yx5WtChl5kNRrRnn6Hmg.jpg",
+        tags: ["Houseboat", "Ayurveda", "Lakes"],
+        energy: [1,5], social: [1,7], adventure: [1,5]
+      },
+      {
+        title: "Mumbai",
+        label: "Urban Life",
+        moods: [0, 5], // Happy, Social
+        img: "https://t4.ftcdn.net/jpg/01/46/43/87/360_F_146438747_3XYwVkfnYZuukBZYmDM8xeoqENzyhAqa.jpg",
+        tags: ["Nightlife", "Bollywood", "Street Food"],
+        energy: [5,10], social: [5,10], adventure: [1,6]
+      },
+    ];
+
+    function renderStep() {
+      // Update indicator dots
+      if (stepIndicator) {
+        [...stepIndicator].forEach((dot, idx) => dot.className = 'dot' + (idx === step ? ' active' : ''));
+      }
+      // Steps logic
+      if(step === 0){
+        stepsDiv.innerHTML = `
+          <h1>AI Mood Analyzer</h1>
+          <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
+          <h2>How are you feeling today?</h2>
+          <div class="mood-options" role="list">
+            ${moods.map((m, i) =>
+              `<div class="mood-option${moodSelected===i?' selected':''}" role="listitem" tabindex="0" aria-pressed="${moodSelected===i}" 
+                onclick="selectMood(${i})" onkeydown="if(event.key==='Enter' || event.key===' ') { event.preventDefault(); selectMood(${i});}" >
+                  <span aria-hidden="true">${m.emoji}</span>
+                  ${m.label}
+                </div>`
+            ).join('')}
           </div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="btn-row">
-      <button class="btn-outline" onclick="restartMood()">Analyze Again</button>
-      <button class="btn-outline" onclick="payForTrip()">Pay & Select Date</button>
-    </div>
-  `;
-}
-
-window.restartMood = function(){
-  step = 0;
-  moodSelected = null;
-  energyLevel = 5;
-  socialLevel = 5;
-  adventureLevel = 5;
-  renderStep();
-}
-
-// window.payForTrip = function(){
-//   alert("Redirecting to payment & date selection...");
-// }
-
-renderStep();
-
-// Click to Pay& select Date , After select trip to plan by Mood analysis...
-
-// ---------- Add after your showRecommendations() ----------
-
-// State for selected destination, user info, and trip date
-let selectedPlaceIdx = null;
-
-// Enhanced: allow click-to-select a single place!
-window.showRecommendations = function() {
-  if (stepIndicator) {
-    [...stepIndicator].forEach((dot) => dot.className = 'dot');
-  }
-  let recommendations = getPersonalizedDestinations();
-  selectedPlaceIdx = null;
-  stepsDiv.innerHTML = `
-    <h1>Your Personalized Recommendations</h1>
-    <div class="subtitle">Based on your current mood and preferences</div>
-    <div class="card-recommend">
-      ${recommendations.map((dest, idx) => `
-        <div class="recommend-card${selectedPlaceIdx===idx?' selected':''}" 
-             onclick="selectPlaceToBook(${idx}, this)">
-          <img src="${dest.img}" alt="">
-          <div class="rc-info">
-            <div class="rc-title">${dest.title}</div>
-            <div class="rc-label">${dest.label}</div>
-            <div class="rc-tags">
-              ${dest.tags.map(tag=>`<span class="rc-tag">${tag}</span>`).join('')}
-            </div>
+          <div class="btn-row">
+            <button class="btn-outline" disabled>Previous</button>
+            <button class="btn-outline"${moodSelected===null?' disabled':''} onclick="nextStep()">Next</button>
           </div>
+          <p style="font-size:0.9rem;color:#666;margin-top:0.6rem;">
+            <em>You can also <strong>start face scan above</strong> to auto-detect your mood.</em>
+          </p>
+        `;
+      }
+      else if(step === 1){
+        let levelText = energyLevel < 3 ? "Low" : (energyLevel < 7 ? "Moderate" : "High");
+        stepsDiv.innerHTML = `
+          <h1>AI Mood Analyzer</h1>
+          <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
+          <div class="slider-section">
+            <div class="slider-title">What's your energy level?</div>
+            <div class="emoji-large">😊</div>
+            <div class="slider-value">${levelText}</div>
+            <input type="range" min="1" max="10" value="${energyLevel}" id="energy-slider" aria-valuemin="1" aria-valuemax="10" aria-valuenow="${energyLevel}" />
+            <div class="slider-labels">
+              <span>Low</span>
+              <span>High</span>
+            </div>
+            <div style="margin-top:10px;"><span style="color:#888;">Energy Level: ${energyLevel}/10</span></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-outline" onclick="prevStep()">Previous</button>
+            <button class="btn-outline" onclick="nextStep()">Next</button>
+          </div>
+        `;
+        setTimeout(()=>{
+          document.getElementById('energy-slider').addEventListener("input", e=>{
+            energyLevel = parseInt(e.target.value);
+            renderStep();
+          });
+        }, 0);
+      }
+      else if(step === 2){
+        let levelText = socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Groups" : "Groups");
+        stepsDiv.innerHTML = `
+          <h1>AI Mood Analyzer</h1>
+          <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
+          <div class="slider-section">
+            <div class="slider-title">How social do you want to be?</div>
+            <div class="emoji-large">👥</div>
+            <div class="slider-value">${levelText}</div>
+            <input type="range" min="1" max="10" value="${socialLevel}" id="social-slider" aria-valuemin="1" aria-valuemax="10" aria-valuenow="${socialLevel}" />
+            <div class="slider-labels">
+              <span>Solo</span>
+              <span>Group</span>
+            </div>
+            <div style="margin-top:10px;"><span style="color:#888;">Social Level: ${socialLevel}/10</span></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-outline" onclick="prevStep()">Previous</button>
+            <button class="btn-outline" onclick="nextStep()">Next</button>
+          </div>
+        `;
+        setTimeout(()=>{
+          document.getElementById('social-slider').addEventListener("input", e=>{
+            socialLevel = parseInt(e.target.value);
+            renderStep();
+          });
+        }, 0);
+      }
+      else if(step === 3){
+        let text = adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild Adventure" : "Adventurous");
+        stepsDiv.innerHTML = `
+          <h1>AI Mood Analyzer</h1>
+          <div class="subtitle">Let our AI understand your current mood to suggest perfect destinations</div>
+          <div class="slider-section">
+            <div class="slider-title">How adventurous are you feeling?</div>
+            <div class="emoji-large">🚶</div>
+            <div class="slider-value">${text}</div>
+            <input type="range" min="1" max="10" value="${adventureLevel}" id="adventure-slider" aria-valuemin="1" aria-valuemax="10" aria-valuenow="${adventureLevel}" />
+            <div class="slider-labels">
+              <span>Safe</span>
+              <span>Adventurous</span>
+            </div>
+            <div style="margin-top:10px;"><span style="color:#888;">Adventure Level: ${adventureLevel}/10</span></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-outline" onclick="prevStep()">Previous</button>
+            <button class="btn-outline" onclick="showRecommendations()">Analyze My Mood</button>
+          </div>
+        `;
+        setTimeout(()=>{
+          document.getElementById('adventure-slider').addEventListener("input", e=>{
+            adventureLevel = parseInt(e.target.value);
+            renderStep();
+          });
+        }, 0);
+      }
+    }
+
+    window.selectMood = function(idx){
+      manualMoodOverride = true; // user manually selected mood - prevent face scanning override
+      moodSelected = idx;
+      renderStep();
+    }
+
+    window.nextStep = function(){
+      if(step < 3) step++;
+      renderStep();
+    }
+
+    window.prevStep = function(){
+      if(step > 0) step--;
+      renderStep();
+    }
+
+    // Filter destinations dynamically based on all params
+    function getPersonalizedDestinations() {
+      let mood = moodSelected;
+      let energy = energyLevel;
+      let social = socialLevel;
+      let adventure = adventureLevel;
+      let results = destinationPool.filter(place => {
+        let moodMatch = place.moods.includes(mood);
+        let energyMatch = (energy >= place.energy[0] && energy <= place.energy[1]);
+        let socialMatch = (social >= place.social[0] && social <= place.social[1]);
+        let adventureMatch = (adventure >= place.adventure[0] && adventure <= place.adventure[1]);
+        return moodMatch && energyMatch && socialMatch && adventureMatch;
+      });
+      if (results.length === 0){
+        results = destinationPool.filter(place=>place.moods.includes(mood)).slice(0,3);
+      }
+      if(results.length === 0){
+        results = destinationPool.slice(0,3);
+      }
+      results = results.sort(()=>Math.random()-0.5).slice(0,3);
+      return results;
+    }
+
+    let selectedPlaceIdx = null;
+
+    window.showRecommendations = function() {
+      if (stepIndicator) {
+        [...stepIndicator].forEach((dot) => dot.className = 'dot');
+      }
+      let recommendations = getPersonalizedDestinations();
+      selectedPlaceIdx = null;
+      stepsDiv.innerHTML = `
+        <h1>Your Personalized Recommendations</h1>
+        <div class="subtitle">Based on your current mood and preferences</div>
+        <div class="card-recommend">
+          ${recommendations.map((dest, idx) => `
+            <div class="recommend-card${selectedPlaceIdx===idx?' selected':''}" 
+                 onclick="selectPlaceToBook(${idx}, this)" role="button" tabindex="0"
+                 onkeydown="if(event.key==='Enter' || event.key===' ') {event.preventDefault(); selectPlaceToBook(${idx}, this);}" aria-pressed="false" aria-label="Select destination ${dest.title}">
+              <img src="${dest.img}" alt="${dest.title} image">
+              <div class="rc-info">
+                <div class="rc-title">${dest.title}</div>
+                <div class="rc-label">${dest.label}</div>
+                <div class="rc-tags">
+                  ${dest.tags.map(tag=>`<span class="rc-tag">${tag}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+          `).join('')}
         </div>
-      `).join('')}
-    </div>
-    <div class="btn-row">
-      <button class="btn-outline" onclick="restartMood()">Analyze Again</button>
-      <button class="btn-outline" id="paySelectBtn" onclick="payForTrip()" disabled>Pay & Select Date</button>
-    </div>
-    <style>.recommend-card.selected{border:2px solid #3366ff;box-shadow:0 2px 8px #3366ff33;}</style>
-  `;
-};
+        <div class="btn-row">
+          <button class="btn-outline" onclick="restartMood()">Analyze Again</button>
+          <button class="btn-outline" id="paySelectBtn" onclick="payForTrip()" disabled>Pay & Select Date</button>
+        </div>
+        <style>.recommend-card.selected{border:2px solid #3366ff;box-shadow:0 2px 8px #3366ff33;}</style>
+      `;
+    };
 
-window.selectPlaceToBook = function(idx, el) {
-  selectedPlaceIdx = idx;
-  // visually update selection
-  [...document.querySelectorAll('.recommend-card')].forEach(card => card.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('paySelectBtn').disabled = false;
-};
+    window.selectPlaceToBook = function(idx, el) {
+      selectedPlaceIdx = idx;
+      [...document.querySelectorAll('.recommend-card')].forEach(card => card.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('paySelectBtn').disabled = false;
+    };
 
-// Pay & Select Date Page
-window.payForTrip = function() {
-  let recommendations = getPersonalizedDestinations();
-  if (selectedPlaceIdx === null) return;
-  const dest = recommendations[selectedPlaceIdx];
-  // Simple dynamic price
-  let amount = 5000 + (energyLevel * 120) + (adventureLevel * 180) + (socialLevel * 100);
-  stepsDiv.innerHTML = `
-    <h1>Trip Booking Details</h1>
-    <form id="tripForm" onsubmit="event.preventDefault(); showTicket(${amount});">
-      <div class="trip-summary">
-        <img src="${dest.img}" style="width:120px;float:right;margin-left:1em;">
-        <b>Destination: </b>${dest.title}<br>
-        <b>Mood: </b>${moods[moodSelected].label}<br>
-        <b>Energy: </b>${energyLevel}/10<br>
-        <b>Social: </b>${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)<br>
-        <b>Adventure: </b>${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)<br>
-      </div>
-      <fieldset style="margin-top:2em;">
-        <legend>User Details</legend>
-        <label>Name: <input name="uname" type="text" required></label><br><br>
-        <label>Age: <input name="uage" type="number" min="1" max="120" required></label><br><br>
-        <label>DOB: <input name="udob" type="date" required></label><br><br>
-        <label>Address: <input name="uaddress" type="text" required></label><br><br>
-      </fieldset>
-      <div style="margin-top:1em;">
-        <label><b>Trip Date:</b> <input name="tripdate" type="date" min="${getToday()}" required></label>
-      </div>
-      <div style="margin:1.5em 0;font-size:1.2em;">
-        <b>Trip Price:</b> ₹${amount}
-      </div>
-      <button type="submit" class="btn-outline" style="margin-right:1em;">Pay & Confirm</button>
-      <button type="button" class="btn-outline" onclick="restartMood()">Cancel</button>
-    </form>
-    <style>
-      .trip-summary{background:#eef3f9;padding:1em;border-radius:7px;margin:1em 0;}
-      fieldset{border-radius:5px;border:1px solid #c4d7e9;}
-      legend{font-weight:bold;}
-      label{display:block; margin-bottom:0.5em;}
-    </style>
-  `;
-};
+    window.payForTrip = function() {
+      let recommendations = getPersonalizedDestinations();
+      if (selectedPlaceIdx === null) return;
+      const dest = recommendations[selectedPlaceIdx];
+      let amount = 5000 + (energyLevel * 120) + (adventureLevel * 180) + (socialLevel * 100);
+      stepsDiv.innerHTML = `
+        <h1>Trip Booking Details</h1>
+        <form id="tripForm" onsubmit="event.preventDefault(); showTicket(${amount});">
+          <div class="trip-summary">
+            <img src="${dest.img}" style="width:120px;float:right;margin-left:1em;" alt="${dest.title} image">
+            <b>Destination: </b>${dest.title}<br>
+            <b>Mood: </b>${moods[moodSelected].label}<br>
+            <b>Energy: </b>${energyLevel}/10<br>
+            <b>Social: </b>${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)<br>
+            <b>Adventure: </b>${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)<br>
+          </div>
+          <fieldset style="margin-top:2em;">
+            <legend>User Details</legend>
+            <label>Name: <input name="uname" type="text" required></label>
+            <label>Age: <input name="uage" type="number" min="1" max="120" required></label>
+            <label>DOB: <input name="udob" type="date" required></label>
+            <label>Address: <input name="uaddress" type="text" required></label>
+          </fieldset>
+          <div style="margin-top:1em;">
+            <label><b>Trip Date:</b> <input name="tripdate" type="date" min="${getToday()}" required></label>
+          </div>
+          <div style="margin:1.5em 0;font-size:1.2em;">
+            <b>Trip Price:</b> ₹${amount}
+          </div>
+          <button type="submit" class="btn-outline" style="margin-right:1em;">Pay & Confirm</button>
+          <button type="button" class="btn-outline" onclick="restartMood()">Cancel</button>
+        </form>
+      `;
+    };
 
-function getToday(){
-  let today = new Date();
-  let m = String(today.getMonth()+1).padStart(2,'0');
-  let d = String(today.getDate()).padStart(2,'0');
-  return `${today.getFullYear()}-${m}-${d}`;
-}
+    function getToday(){
+      let today = new Date();
+      let m = String(today.getMonth()+1).padStart(2,'0');
+      let d = String(today.getDate()).padStart(2,'0');
+      return `${today.getFullYear()}-${m}-${d}`;
+    }
 
-// Show "ticket slip" after payment confirmation
-window.showTicket = function(amount) {
-  let f = document.getElementById('tripForm');
-  let name = f.uname.value;
-  let age = f.uage.value;
-  let dob = f.udob.value;
-  let address = f.uaddress.value;
-  let tripdate = f.tripdate.value;
+    window.showTicket = function(amount) {
+      let f = document.getElementById('tripForm');
+      let name = f.uname.value;
+      let age = f.uage.value;
+      let dob = f.udob.value;
+      let address = f.uaddress.value;
+      let tripdate = f.tripdate.value;
 
-  let recommendations = getPersonalizedDestinations();
-  const dest = recommendations[selectedPlaceIdx];
+      let recommendations = getPersonalizedDestinations();
+      const dest = recommendations[selectedPlaceIdx];
 
-  stepsDiv.innerHTML = `
-    <div style="max-width:375px;margin:2em auto;padding:2em 2.2em 1.6em;border-radius:16px;background:#f6f7fb;box-shadow:0 4px 16px #0053af12;color:#212d49;">
-      <div style="text-align:center;margin-bottom:0.9em;">
-        <img src="${dest.img}" style="width:85px;border-radius:7px;border:2px solid #1947b5;">
-        <h2 style="margin:0.8em 0 0.1em;font-size:1.5em;">DarShana AI Trip Ticket</h2>
-        <small style="color:#777;">Your Mood-Powered Experience</small>
-      </div>
-      <div style="margin:1em 0 1.2em;line-height:1.5;">
-        <b>Name:</b> ${name}<br>
-        <b>Age:</b> ${age} <br>
-        <b>DOB:</b> ${dob}<br>
-        <b>Address:</b> ${address}<br>
-        <b>Date of Trip:</b> ${tripdate}
-      </div>
-      <div style="background:#dde6f9;padding:10px 12px 8px;border-radius:7px;">
-        <b>Destination:</b> ${dest.title} <br>
-        <b>Mood:</b> ${moods[moodSelected].label}<br>
-        <b>Energy:</b> ${energyLevel}/10 &nbsp;
-        <b>Social:</b> ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10) <br>
-        <b>Adventure:</b> ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10) <br>
-      </div>
-      <div style="margin:1em 0;font-size:1.2em;">
-        <b>Amount Paid: ₹${amount}</b>
-      </div>
-      <div style="text-align:center;margin-bottom:1em;">
-        <span style="font-size:1.35em;color:#009944;"><b>Booking Confirmed</b></span><br>
-        <span style="font-size:1em;color:#2a67f5;">Enjoy your AI-powered journey!</span>
-      </div>
-      <button class="btn-outline" style="display:block;margin:10px auto 0;" onclick="restartMood()">Plan Another Trip</button>
-      <button class="btn-outline" style="display:block;margin:16px auto 0;" onclick="downloadTicketPDF()">Download PDF Slip</button>
-    </div>
-  `;
-};
+      stepsDiv.innerHTML = `
+        <div style="max-width:375px;margin:2em auto;padding:2em 2.2em 1.6em;border-radius:16px;background:#f6f7fb;box-shadow:0 4px 16px #0053af12;color:#212d49;">
+          <div style="text-align:center;margin-bottom:0.9em;">
+            <img src="${dest.img}" style="width:85px;border-radius:7px;border:2px solid #1947b5;" alt="${dest.title} image">
+            <h2 style="margin:0.8em 0 0.1em;font-size:1.5em;">DarShana AI Trip Ticket</h2>
+            <small style="color:#777;">Your Mood-Powered Experience</small>
+          </div>
+          <div style="margin:1em 0 1.2em;line-height:1.5;">
+            <b>Name:</b> ${name}<br>
+            <b>Age:</b> ${age} <br>
+            <b>DOB:</b> ${dob}<br>
+            <b>Address:</b> ${address}<br>
+            <b>Date of Trip:</b> ${tripdate}
+          </div>
+          <div style="background:#dde6f9;padding:10px 12px 8px;border-radius:7px;">
+            <b>Destination:</b> ${dest.title} <br>
+            <b>Mood:</b> ${moods[moodSelected].label}<br>
+            <b>Energy:</b> ${energyLevel}/10 &nbsp;
+            <b>Social:</b> ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10) <br>
+            <b>Adventure:</b> ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10) <br>
+          </div>
+          <div style="margin:1em 0;font-size:1.2em;">
+            <b>Amount Paid: ₹${amount}</b>
+          </div>
+          <div style="text-align:center;margin-bottom:1em;">
+            <span style="font-size:1.35em;color:#009944;"><b>Booking Confirmed</b></span><br>
+            <span style="font-size:1em;color:#2a67f5;">Enjoy your AI-powered journey!</span>
+          </div>
+          <button class="btn-outline" style="display:block;margin:10px auto 0;" onclick="restartMood()">Plan Another Trip</button>
+          <button class="btn-outline" style="display:block;margin:16px auto 0;" onclick="downloadTicketPDF()">Download PDF Slip</button>
+        </div>
+      `;
+    };
 
-// geerate a trip ticket pdf
-window.downloadTicketPDF = function() {
-  // Use your global state or last booking info
-  let recommendations = getPersonalizedDestinations();
-  const dest = recommendations[selectedPlaceIdx];
-  let amount = document.querySelector("div[style*='font-size:1.2em;'] b").textContent.match(/\d+/)[0];
+    // Generate PDF ticket using jsPDF
+    window.downloadTicketPDF = function() {
+      let recommendations = getPersonalizedDestinations();
+      const dest = recommendations[selectedPlaceIdx];
+      let amountElem = document.querySelector("div[style*='font-size:1.2em;'] b");
+      let amountMatch = amountElem ? amountElem.textContent.match(/\d+/) : null;
+      let amount = amountMatch ? amountMatch[0] : "N/A";
 
-  // You can store name, age etc. as global vars when confirming the booking
-  // For a simple approach, you can capture via prompt or cache those values
-  // If you defined those details globally in showTicket, just reuse them here!
-  // If not, you can add those variables to window, e.g., window.lastBookingName, etc.
+      // Use last booking info stored globally for better UX
+      // Otherwise prompt user for data (simple solution here)
+      let name = prompt("Enter Name (for PDF):", "");
+      let age = prompt("Enter Age (for PDF):", "");
+      let dob = prompt("Enter DOB (YYYY-MM-DD):", "");
+      let address = prompt("Enter Address:", "");
+      let tripdate = prompt("Enter Trip Date (YYYY-MM-DD):", "");
 
-  // For now, ask for details if needed (or expand as you wish)
-  let name = prompt("Enter Name (for PDF):", "");
-  let age = prompt("Enter Age (for PDF):", "");
-  let dob = prompt("Enter DOB (YYYY-MM-DD):", "");
-  let address = prompt("Enter Address:", "");
-  let tripdate = prompt("Enter Trip Date (YYYY-MM-DD):", "");
+      const { jsPDF } = window.jspdf;
+      let doc = new jsPDF();
+      let y = 20;
 
-  const { jsPDF } = window.jspdf;
-  let doc = new jsPDF();
-  let y = 20;
+      doc.setFontSize(16);
+      doc.text('DarShana AI Trip Ticket', 20, y); y+=11;
+      doc.setFontSize(10);
+      doc.text('Your Mood-Powered Experience', 20, y); y+=12;
+      doc.setFontSize(12);
+      doc.text(`Name: ${name}`, 20, y); y+=7;
+      doc.text(`Age: ${age}`, 20, y); y+=7;
+      doc.text(`DOB: ${dob}`, 20, y); y+=7;
+      doc.text(`Address: ${address}`, 20, y); y+=7;
+      doc.text(`Trip Date: ${tripdate}`, 20, y); y+=8;
+      doc.text(`Destination: ${dest.title}`, 20, y); y+=7;
+      doc.text(`Mood: ${moods[moodSelected].label}`, 20, y); y+=7;
+      doc.text(`Energy: ${energyLevel}/10`, 20, y); y+=7;
+      doc.text(`Social: ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)`, 20, y); y+=7;
+      doc.text(`Adventure: ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)`, 20, y); y+=8;
+      doc.setFontSize(13);
+      doc.text(`Amount Paid: ₹${amount}`, 20, y); y+=9;
+      doc.setFontSize(11);
+      doc.text('Booking Confirmed | Enjoy your AI-powered journey!', 20, y);
 
-  doc.setFontSize(16);
-  doc.text('DarShana AI Trip Ticket', 20, y); y+=11;
-  doc.setFontSize(10);
-  doc.text('Your Mood-Powered Experience', 20, y); y+=12;
-  doc.setFontSize(12);
-  doc.text(`Name: ${name}`, 20, y); y+=7;
-  doc.text(`Age: ${age}`, 20, y); y+=7;
-  doc.text(`DOB: ${dob}`, 20, y); y+=7;
-  doc.text(`Address: ${address}`, 20, y); y+=7;
-  doc.text(`Trip Date: ${tripdate}`, 20, y); y+=8;
-  doc.text(`Destination: ${dest.title}`, 20, y); y+=7;
-  doc.text(`Mood: ${moods[moodSelected].label}`, 20, y); y+=7;
-  doc.text(`Energy: ${energyLevel}/10`, 20, y); y+=7;
-  doc.text(`Social: ${socialLevel < 4 ? "Solo" : (socialLevel < 7 ? "Small Group" : "Group")} (${socialLevel}/10)`, 20, y); y+=7;
-  doc.text(`Adventure: ${adventureLevel < 4 ? "Safe" : (adventureLevel < 7 ? "Mild" : "Adventurous")} (${adventureLevel}/10)`, 20, y); y+=8;
-  doc.setFontSize(13);
-  doc.text(`Amount Paid: ₹${amount}`, 20, y); y+=9;
-  doc.setFontSize(11);
-  doc.text('Booking Confirmed | Enjoy your AI-powered journey!', 20, y);
+      doc.save('Darshana_Trip_Ticket.pdf');
+    };
 
-  doc.save('Darshana_Trip_Ticket.pdf');
-};
+    window.restartMood = function(){
+      step = 0;
+      moodSelected = null;
+      energyLevel = 5;
+      socialLevel = 5;
+      adventureLevel = 5;
+      manualMoodOverride = false;
+      renderStep();
+    };
+
+    // Initial render
+    renderStep();
+    noMood();
+
 
 
 // Cultural recommandation of enevt and fastivals
