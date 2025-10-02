@@ -1,3 +1,187 @@
+/* Face Detector Specific Styles Only */
+
+.scanner-box {
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  border-radius: 32px;
+  box-shadow: 0 8px 24px rgba(55,0,100,0.15), 0 2px 8px rgba(80,0,255,0.08);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(18px);
+  border: 2.5px solid rgba(255,255,255,0.26);
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.scanner-title {
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px #23009a99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+#startBtn {
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: 10px 24px;
+  font-size: 1em;
+  font-weight: 500;
+  background: linear-gradient(90deg,#4fcbff 10%,#a88cfb 75%);
+  color: #fff;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.13s,box-shadow 0.18s;
+  margin: 0 auto 18px auto;
+  box-shadow: 0 3px 18px #6f00ff44;
+  opacity: 0.94;
+  backdrop-filter: blur(7px);
+  user-select: none;
+}
+
+#startBtn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 22px #a88cfb44;
+  opacity: 1;
+  background: linear-gradient(90deg,#954eff 0%,#4fcbff 90%);
+}
+
+.video-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.camera-border {
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 7px;
+  background: linear-gradient(130deg, #61efff, #c064ff, #bbfaff);
+  animation: borderAnim 2.2s linear infinite;
+  box-shadow: 0 2px 12px #0002;
+  width: 210px;
+  height: 210px;
+}
+
+@keyframes borderAnim {
+  0% { filter: hue-rotate(0deg);}
+  100% { filter: hue-rotate(360deg);}
+}
+
+#video {
+  display: block;
+  width: 210px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fff8;
+  background: #d7f3ff50;
+  box-shadow: 0 0 35px #3edcff42;
+  transition: filter 0.3s;
+}
+
+#video.paused { filter: grayscale(0.8) blur(3px) brightness(0.8);}
+
+.live-dot {
+  width: 12px; height:12px;
+  background: #00ff57;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #00ffae66;
+  margin: 0 0 15px 0;
+  animation: blink 1.2s infinite;
+  display:inline-block;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1;}
+  40% { opacity: 0.2;}
+  60% { opacity: 0.7;}
+}
+
+#result {
+  min-height: 54px;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #343155;
+  text-shadow: 0 1px 7px #fff9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.46s;
+  user-select:none;
+}
+
+#result.show { opacity: 1; }
+
+.emoji {
+  font-size: 2.6em;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 2px 9px #4fcbff85);
+  transition: 0.33s;
+}
+
+#mood-label {
+  font-size: 1.2em;
+  margin-top: 4px;
+  color: #3e2467;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  transition: 0.3s;
+}
+
+#progress {
+  margin: 5px 0 0 0;
+  color:#5f38ff;
+  font-size: 1em;
+  letter-spacing: 0.03em;
+}
+
+.webcam-status {
+  color: #ff6b6b;
+  font-weight: 500;
+  margin: 7px 0 14px 0;
+  min-height: 24px;
+  font-size: 1.02em;
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+  .scanner-box {
+    padding: 1rem 1.1rem 1.4rem 1.1rem;
+    max-width: 320px;
+  }
+  .camera-border {
+    width: 140px;
+    height: 140px;
+    padding: 5px;
+  }
+  #video {
+    width: 140px;
+    height: 140px;
+  }
+  .scanner-title {
+    font-size: 1.3rem;
+  }
+}
+
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
