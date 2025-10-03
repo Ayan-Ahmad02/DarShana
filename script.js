@@ -2,10 +2,10 @@
     const moodEmojis = {
       happy:    "😄",
       sad:      "😢",
-      angry:    "😠",
-      surprised:"😮",
+      Energetic: "😃",
+      surprised: "😮",
       fearful:  "😱",
-      disgusted:"🤢",
+      Reflective: "🤔",
       neutral:  "😐"
     };
 
@@ -31,26 +31,27 @@
     let adventureLevel = 5;
 
     const moods = [
-      {emoji:"😊", label:"Happy & Excited"},
-      {emoji:"😌", label:"Calm & Peaceful"},
-      {emoji:"😲", label:"Curious & Explorative"},
-      {emoji:"💪", label:"Energetic & Active"},
-      {emoji:"🧘‍♂️", label:"Reflective & Mindful"},
-      {emoji:"🎉", label:"Celebratory & Social"}
-    ];
+  {emoji:"😊", label:"Happy & Excited"},
+  {emoji: "😐", label: "Calm & Peaceful"},
+  {emoji: "😮", label: "Curious & Explorative"},
+  {emoji: "😢", label: "sad"},
+  {emoji: "😃", label: "Energetic & Active"},
+  {emoji: "🤔", label: "Reflective & Mindful"},
+  {emoji: "😁", label: "Celebratory & Social"}
+];
 
     // Map face-api moods to your mood indices to sync
     // faceapi expressions: happy, sad, angry, surprised, fearful, disgusted, neutral
     // Your moods: 0=Happy,1=Calm,2=Curious,3=Energetic,4=Reflective,5=Social/Celebratory
     // Approximate mapping:
     const faceToMoodIndex = {
-      happy: 0,
-      sad: 1,
-      angry: null,        // no direct map, so ignore or fallback
+      happy:    0,
+      sad:      1,
+      Energetic: 2,
       surprised: 2,
-      fearful: 4,
-      disgusted: null,
-      neutral: 1          // map neutral to Calm & Peaceful for starter
+      fearful:  4,
+      Reflective: 3,
+      neutral:  1
     };
 
     // UTILS: Show webcam message and reset UI
